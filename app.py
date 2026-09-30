@@ -704,14 +704,112 @@ def main():
     side_selected = st.selectbox("📍 Which Part of the Farm?", FARM_SIDES, index=0)
 
     st.markdown("**📡 GPS Coordinates** — tap the button below on your phone")
+
+    # Initialize session state for GPS
+    if "gps_lat" not in st.session_state:
+        st.session_state.gps_lat = ""
+    if "gps_lon" not in st.session_state:
+        st.session_state.gps_lon = ""
+
+    # GPS button using streamlit-js-eval style — triggers page rerun via query params
+    GPS_HTML = """
+    <div id="gps_wrap" style="margin:6px 0;">
+    <button onclick="getLocation()" id="gps_btn"
+        style="background:linear-gradient(135deg,#1b4332,#2d6a4f);color:white;border:none;
+            border-radius:12px;padding:14px 18px;font-size:1.05rem;font-weight:700;
+            cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(27,67,50,0.3);">
+        📡 Tap to Get My GPS Location
+    </button>
+    <div id="gps_info" style="margin-top:10px;font-size:0.95rem;color:#333;"></div>
+    <div id="gps_help" style="display:none;background:#fff8e1;border:1px solid #f9a825;
+        border-radius:10px;padding:12px;margin-top:10px;font-size:0.88rem;
+        color:#555;line-height:1.7;">
+        <strong>📋 How to allow location:</strong><br>
+        <b>iPhone:</b> Settings → Safari → Location → Allow<br>
+        <b>Android:</b> Tap 🔒 in address bar → Site Settings → Location → Allow<br><br>
+        <strong>📍 Manual:</strong> Open
+        <a href="https://maps.google.com" target="_blank" style="color:#1976d2;">Google Maps</a>,
+        long-press your spot → copy the numbers shown.
+    </div>
+    </div>
+    <script>
+    function getLocation() {
+    var btn  = document.getElementById('gps_btn');
+    var info = document.getElementById('gps_info');
+    var help = document.getElementById('gps_help');
+    btn.innerHTML = '⏳ Getting location…';
+    btn.disabled = true;
+    help.style.display = 'none';
+
+    if (!navigator.geolocation) {
+        info.innerHTML = '❌ GPS not supported on this browser.';
+        help.style.display = 'block';
+        btn.innerHTML = '📡 GPS Not Available';
+        btn.disabled = false;
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        function(pos) {
+        var lat = pos.coords.latitude.toFixed(6);
+        var lon = pos.coords.longitude.toFixed(6);
+        var acc = Math.round(pos.coords.accuracy);
+
+        // Show success in the JS panel
+        info.innerHTML =
+            '✅ <strong style="color:#1b4332;">Location captured!</strong><br>' +
+            '📍 Lat: <strong>' + lat + '</strong> &nbsp;|&nbsp; ' +
+            'Lon: <strong>' + lon + '</strong>' +
+            ' <span style="color:#999;font-size:0.82rem;">(±' + acc + 'm)</span>';
+
+        // ✅ FIX: trigger Streamlit rerun by updating URL params
+        // AND directly update the Streamlit input fields via DOM
+        var url = new URL(window.location.href);
+        url.searchParams.set('gps_lat', lat);
+        url.searchParams.set('gps_lon', lon);
+        window.location.href = url.toString();  // full reload with params = Streamlit picks them up
+        },
+        function(err) {
+        var msgs = {
+            1: '🚫 Location blocked. See help below, then tap again.',
+            2: '📶 Location unavailable. Try moving outside.',
+            3: '⏱️ Timed out. Try again or enter manually below.'
+        };
+        info.innerHTML = '<span style="color:#c62828;">' +
+            (msgs[err.code] || '❌ ' + err.message) + '</span>';
+        help.style.display = 'block';
+        btn.innerHTML = '📡 Tap to Retry GPS';
+        btn.disabled = false;
+        },
+        {enableHighAccuracy: true, timeout: 12000, maximumAge: 0}
+    );
+    }
+    </script>
+    """
+
     st.iframe(GPS_HTML, height = 120)
-    st.caption("🔒 GPS blocked? Enter coordinates manually (open Google Maps → long-press your spot → copy numbers).")
+
+    # ✅ FIX: Read GPS from URL params and store in session_state
+    params = st.query_params
+    if params.get("gps_lat") and params.get("gps_lon"):
+        st.session_state.gps_lat = params.get("gps_lat")
+        st.session_state.gps_lon = params.get("gps_lon")
+        # Show green confirmation that GPS was captured
+        st.success(f"📍 GPS captured: **{st.session_state.gps_lat}**, **{st.session_state.gps_lon}**")
+
+    st.caption("🔒 GPS blocked? Enter coordinates manually (Google Maps → long-press your spot → copy numbers).")
 
     lat_col, lon_col = st.columns(2)
     with lat_col:
-        lat_input = st.text_input("Latitude",  value=gps_lat, placeholder="e.g. 37.989450")
+        # ✅ FIX: pre-fill from session_state so GPS values appear automatically
+        lat_input = st.text_input("Latitude",
+                                value=st.session_state.gps_lat,
+                                placeholder="e.g. 37.989450")
     with lon_col:
-        lon_input = st.text_input("Longitude", value=gps_lon, placeholder="e.g. -87.590321")
+        lon_input = st.text_input("Longitude",
+                                value=st.session_state.gps_lon,
+                                placeholder="e.g. -87.590321")
+
 
     # STEP 2
     st.markdown("""
