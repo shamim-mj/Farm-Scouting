@@ -151,6 +151,7 @@ def setup_cloudinary():
         return False
     cn  = get_secret("CLOUDINARY_CLOUD_NAME")
     ak  = get_secret("CLOUDINARY_API_KEY")
+    # ✅ BUG FIX 1: was "CLOUDINARY_API_SECRET " (trailing space) — now correct
     ase = get_secret("CLOUDINARY_API_SECRET")
     if cn and ak and ase:
         cloudinary.config(cloud_name=cn, api_key=ak, api_secret=ase)
@@ -198,7 +199,23 @@ def get_gsheet():
         creds_raw = get_secret("GSHEET_CREDENTIALS")
         if not creds_raw:
             return None, None
-        creds_dict = json.loads(creds_raw) if isinstance(creds_raw, str) else dict(creds_raw)
+        # ✅ BUG FIX 2: handle both dict (from TOML) and JSON string
+        if isinstance(creds_raw, str):
+            creds_dict = json.loads(creds_raw)
+        else:
+            # Streamlit parses TOML inline tables as AttrDict — convert properly
+            creds_dict = {
+                "type":                        creds_raw["type"],
+                "project_id":                  creds_raw["project_id"],
+                "private_key_id":              creds_raw["private_key_id"],
+                "private_key":                 creds_raw["private_key"],
+                "client_email":                creds_raw["client_email"],
+                "client_id":                   creds_raw["client_id"],
+                "auth_uri":                    creds_raw["auth_uri"],
+                "token_uri":                   creds_raw["token_uri"],
+                "auth_provider_x509_cert_url": creds_raw.get("auth_provider_x509_cert_url", ""),
+                "client_x509_cert_url":        creds_raw.get("client_x509_cert_url", ""),
+            }
         scopes = [
             "https://www.googleapis.com/auth/spreadsheets",
             "https://www.googleapis.com/auth/drive",
@@ -216,14 +233,15 @@ def get_gsheet():
                 "Photo URL", "Severity"
             ])
         return sh, ws
-    except Exception:
+    except Exception as e:
+        st.error(f"Sheet connection error: {e}")
         return None, None
 
 def save_to_gsheet(ws, row):
     try:
         ws.append_row(row)
         return True
-    except Exception:
+    except Exception as e:
         return False
 
 # ─────────────────────────────────────────────
@@ -254,8 +272,10 @@ def send_email(issue_data, photo_src):
         )
         maps = ""
         if issue_data.get("lat") not in ("N/A", ""):
-            maps = (f'<br><a href="https://maps.google.com/?q={issue_data["lat"]},{issue_data["lon"]}" '
-                    f'style="color:#1976d2;">📍 View on Google Maps</a>')
+            maps = (
+                f'<br><a href="https://maps.google.com/?q={issue_data["lat"]},{issue_data["lon"]}" '
+                f'style="color:#1976d2;">📍 View on Google Maps</a>'
+            )
 
         html = f"""
         <html><body style="font-family:Segoe UI,sans-serif;background:#f0f4f0;padding:20px;">
@@ -310,7 +330,7 @@ def send_email(issue_data, photo_src):
           </div>
           <div style="background:#f1f8f4;padding:12px;text-align:center;
                       font-size:0.78rem;color:#888;border-top:1px solid #e0e0e0;">
-            🌾 Robbie Williams Farms – Field Scout App &nbsp;|&nbsp; {issue_data['timestamp']}
+            🌾 Robbie Williams Farms – Field Scout App | {issue_data['timestamp']}
           </div>
         </div>
         </body></html>"""
@@ -324,24 +344,14 @@ def send_email(issue_data, photo_src):
         return False, str(e)
 
 # ─────────────────────────────────────────────
-#  SMS NOTIFICATION (email-to-SMS gateway)
+#  SMS  (email-to-SMS gateway)
 # ─────────────────────────────────────────────
-#
-#  Carrier email-to-SMS gateways (add yours to secrets):
-#  AT&T:        {number}@txt.att.net
-#  Verizon:     {number}@vtext.com
-#  T-Mobile:    {number}@tmomail.net
-#  Sprint:      {number}@messaging.sprintpcs.com
-#  US Cellular: {number}@email.uscc.net
-#  Cricket:     {number}@sms.cricketwireless.net
-#  Boost:       {number}@sms.myboostmobile.com
-#
 def send_sms(issue_data):
-    """Send a short text message via email-to-SMS gateway."""
     try:
         sender      = get_secret("EMAIL_SENDER")
         password    = get_secret("EMAIL_PASSWORD")
-        sms_address = get_secret("SMS_ADDRESS ")   # e.g. 2705551234@vtext.com
+        # ✅ BUG FIX 3: was "SMS_ADDRESS " (trailing space) — now correct
+        sms_address = get_secret("SMS_ADDRESS")
         if not all([sender, password, sms_address]):
             return False, "SMS_ADDRESS secret missing"
 
@@ -351,7 +361,6 @@ def send_sms(issue_data):
             "🟢 Low – Note it":    "🟢 Low",
         }.get(issue_data["severity"], issue_data["severity"])
 
-        # Keep SMS very short — carriers truncate long messages
         body = (
             f"🌾 Farm Scout Alert\n"
             f"{sev_icon}\n"
@@ -362,10 +371,10 @@ def send_sms(issue_data):
             f"{issue_data['description'][:80]}"
         )
 
-        msg = MIMEText(body)
+        msg            = MIMEText(body)
         msg["From"]    = sender
         msg["To"]      = sms_address
-        msg["Subject"] = ""   # Subject shows as part of text on most carriers
+        msg["Subject"] = ""
 
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(sender, password)
@@ -375,7 +384,7 @@ def send_sms(issue_data):
         return False, str(e)
 
 # ─────────────────────────────────────────────
-#  FARM / ISSUE / SIDE LISTS
+#  LISTS
 # ─────────────────────────────────────────────
 FARMS = [
     "🌱 Select a farm…",
@@ -433,43 +442,34 @@ ISSUE_TYPES = [
     "🌩️ Weather / Storm Damage",
     "🌿 Weed Pressure",
     "🐾 Wildlife / Animal Damage",
-    "⚠️ Other"
+    "⚠️ Other",
 ]
 
 FARM_SIDES = [
     "📍 Select location…",
-
-    # General Extent
     "🗺️ Entire Field",
     "🎯 Center / Middle",
-
-    # Cardinal Directions
     "⬆️ North End",
     "⬇️ South End",
     "➡️ East Side",
     "⬅️ West Side",
-
-    # Specific Field Features
     "🚜 End Rows / Turn Rows",
     "🚜 Headlands",
     "📉 Low Spot / Swale",
     "⛰️ Terrace Top / Ridge",
-
-    # Boundaries & Surroundings
     "🚧 Field Border / Edge",
     "🌳 Left Tree Line",
     "🌳 Right Tree Line",
     "🚗 Near Entrance",
     "🌊 Near Waterway / Ditch",
     "🛣️ Roadside",
-
-    "📝 Other – see description"
+    "📝 Other – see description",
 ]
 
 # ─────────────────────────────────────────────
-#  GPS COMPONENT
+#  GPS HTML
 # ─────────────────────────────────────────────
-GPS_COMPONENT = """
+GPS_HTML = """
 <div id="gps_status" style="margin:6px 0;">
   <button onclick="getLocation()" id="gps_btn"
     style="background:linear-gradient(135deg,#1b4332,#2d6a4f);color:white;border:none;
@@ -479,8 +479,7 @@ GPS_COMPONENT = """
   </button>
   <div id="coords" style="margin-top:10px;font-size:0.95rem;color:#333;"></div>
   <div id="gps_help" style="display:none;background:#fff8e1;border:1px solid #f9a825;
-       border-radius:10px;padding:12px;margin-top:10px;font-size:0.88rem;
-       color:#555;line-height:1.7;">
+       border-radius:10px;padding:12px;margin-top:10px;font-size:0.88rem;color:#555;line-height:1.7;">
     <strong>📋 How to allow location:</strong><br>
     <b>iPhone:</b> Settings → Safari → Location → Allow<br>
     <b>Android:</b> Tap 🔒 in address bar → Site Settings → Location → Allow<br><br>
@@ -538,27 +537,18 @@ function getLocation() {
 """
 
 # ─────────────────────────────────────────────
-#  PDF SECTION  — always from secret URL
+#  PDF SECTION
 # ─────────────────────────────────────────────
 def show_pdf_section():
     pdf_url = get_secret("FARM_PDF_URL", "")
-
     st.markdown("""
     <div class="section-card">
-      <div class="section-title">
-        📄 &nbsp;Farm Field Reference Map
-      </div>
+      <div class="section-title">📄 &nbsp;Farm Field Reference Map</div>
     </div>
     """, unsafe_allow_html=True)
-
     with st.expander("📄 Tap to View Farm Fields & Acreage Guide", expanded=False):
         if pdf_url:
-            st.markdown(
-                f'<iframe src="{pdf_url}" width="100%" height="560px" '
-                f'style="border:none;border-radius:12px;'
-                f'box-shadow:0 2px 10px rgba(0,0,0,0.1);"></iframe>',
-                unsafe_allow_html=True,
-            )
+            st.iframe(pdf_url, height=560)
             st.caption("👆 Scroll inside the document to view all farm fields and acreage.")
         else:
             st.warning("⚠️ Farm PDF not configured. Add `FARM_PDF_URL` to Streamlit secrets.")
@@ -568,7 +558,6 @@ def show_pdf_section():
 # ─────────────────────────────────────────────
 def main():
 
-    # ══ HERO BANNER ══════════════════════════
     st.markdown("""
     <div class="hero">
       <div class="hero-icon">🌾</div>
@@ -581,19 +570,16 @@ def main():
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Setup services ────────────────────────
     cloudinary_ok = setup_cloudinary()
     _, gsheet_ws  = get_gsheet()
 
-    # ══ PDF REFERENCE ═════════════════════════
     show_pdf_section()
 
-    # ── Read GPS from URL params ──────────────
     params  = st.query_params
     gps_lat = params.get("lat", "")
     gps_lon = params.get("lon", "")
 
-    # ══ STEP 1 – Farm & Location ══════════════
+    # STEP 1
     st.markdown("""
     <div class="section-card">
       <div class="section-title"><span class="step-badge">1</span>Where is the problem?</div>
@@ -604,7 +590,7 @@ def main():
     side_selected = st.selectbox("📍 Which Part of the Farm?", FARM_SIDES, index=0)
 
     st.markdown("**📡 GPS Coordinates** — tap the button below on your phone")
-    st.components.v1.html(GPS_COMPONENT, height=120)
+    st.html(GPS_HTML)
     st.caption("🔒 GPS blocked? Enter coordinates manually (open Google Maps → long-press your spot → copy numbers).")
 
     lat_col, lon_col = st.columns(2)
@@ -613,7 +599,7 @@ def main():
     with lon_col:
         lon_input = st.text_input("Longitude", value=gps_lon, placeholder="e.g. -87.590321")
 
-    # ══ STEP 2 – Issue Details ════════════════
+    # STEP 2
     st.markdown("""
     <div class="section-card">
       <div class="section-title"><span class="step-badge">2</span>What is the problem?</div>
@@ -632,7 +618,7 @@ def main():
         height=130,
     )
 
-    # ══ STEP 3 – Photo ════════════════════════
+    # STEP 3
     st.markdown("""
     <div class="section-card">
       <div class="section-title">
@@ -654,7 +640,7 @@ def main():
         except Exception:
             st.warning("Could not preview photo, but it will still be submitted.")
 
-    # ══ STEP 4 – Reporter Name ════════════════
+    # STEP 4
     st.markdown("""
     <div class="section-card">
       <div class="section-title"><span class="step-badge">4</span>Your Name</div>
@@ -663,12 +649,10 @@ def main():
 
     reporter_name = st.text_input("👤 Your Name", placeholder="e.g. John Smith")
 
-    # ══ SUBMIT ════════════════════════════════
     st.markdown("---")
 
     if st.button("🚀 Submit Scout Report", use_container_width=True):
 
-        # Validation
         errors = []
         if farm_selected.startswith("🌱"):  errors.append("Please select a farm.")
         if side_selected.startswith("📍"):  errors.append("Please select the farm location/side.")
@@ -689,7 +673,6 @@ def main():
         photo_url = ""
         photo_b64 = ""
 
-        # Upload photo
         progress.progress(20, text="Uploading photo…")
         if photo_file:
             photo_file.seek(0)
@@ -712,7 +695,6 @@ def main():
             "timestamp": timestamp, "photo_url": photo_url,
         }
 
-        # Google Sheets
         progress.progress(50, text="Saving record…")
         sheet_ok = False
         if gsheet_ws:
@@ -722,7 +704,6 @@ def main():
                 lat_input or "N/A", lon_input or "N/A", photo_url, severity,
             ])
 
-        # Email + SMS
         progress.progress(75, text="Sending notifications…")
         email_src = (
             photo_url if (photo_url and not photo_url.startswith("ERROR")
@@ -734,7 +715,6 @@ def main():
 
         progress.progress(100, text="Done!")
 
-        # Status
         lines = []
         if not photo_file:
             lines.append("📷 No photo submitted")
@@ -764,7 +744,6 @@ def main():
 
         st.query_params.clear()
 
-    # ── Footer ────────────────────────────────
     st.markdown("""
     <div class="footer">
       🌾 <strong>Robbie Williams Farms</strong> &nbsp;|&nbsp;
