@@ -590,7 +590,7 @@ def main():
     side_selected = st.selectbox("📍 Which Part of the Farm?", FARM_SIDES, index=0)
 
     st.markdown("**📡 GPS Coordinates** — tap the button below on your phone")
-    st.html(GPS_HTML)
+    st.components.v1.html(GPS_HTML, height = 120)
     st.caption("🔒 GPS blocked? Enter coordinates manually (open Google Maps → long-press your spot → copy numbers).")
 
     lat_col, lon_col = st.columns(2)
@@ -636,7 +636,7 @@ def main():
     )
     if photo_file:
         try:
-            st.image(Image.open(photo_file), caption="📷 Photo Preview", use_container_width=True)
+            st.image(Image.open(photo_file), caption="📷 Photo Preview", width='stretch')
         except Exception:
             st.warning("Could not preview photo, but it will still be submitted.")
 
@@ -651,7 +651,7 @@ def main():
 
     st.markdown("---")
 
-    if st.button("🚀 Submit Scout Report", use_container_width=True):
+    if st.button("🚀 Submit Scout Report", width='stretch'):
 
         errors = []
         if farm_selected.startswith("🌱"):  errors.append("Please select a farm.")
@@ -740,7 +740,7 @@ def main():
         """, unsafe_allow_html=True)
 
         if photo_url and not photo_url.startswith("ERROR") and photo_url != "embedded-in-email":
-            st.image(photo_url, caption="📷 Saved Photo", use_container_width=True)
+            st.image(photo_url, caption="📷 Saved Photo", width='stretch')
 
         st.query_params.clear()
 
