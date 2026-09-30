@@ -224,6 +224,13 @@ def get_gsheet():
     except Exception as e:
         st.error(f"Sheet connection error: {e}")
         return None, None
+    
+def save_to_gsheet(ws, row):
+    try:
+        ws.append_row(row)
+        return True
+    except Exception as e:
+        return False
 
 # ─────────────────────────────────────────────
 #  EMAIL
