@@ -229,65 +229,67 @@ def build_email_html(issue_data, photo_src):
             f'style="color:#1976d2;">📍 View on Google Maps</a>'
         )
 
-    return f"""
-<html>
-    <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7f9f7; padding: 40px 20px; margin: 0; -webkit-font-smoothing: antialiased;">
-    <div style="max-width: 560px; margin: 0 auto; background: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 12px 32px rgba(27, 67, 50, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);">
-    
-    <!-- Header Section -->
-    <div style="background: linear-gradient(145deg, #133024, #1b4332); padding: 32px 24px; text-align: center; color: #ffffff; position: relative;">
-      <!-- Subtle Decorative Accent Grid/Dot pattern alternative or clean graphic emoji anchor -->
-      <div style="font-size: 2.5rem; margin-bottom: 12px; line-height: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));">🌾</div>
-      <h2 style="margin: 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2;">Robbie Williams FARMS</h2>
-      <p style="margin: 8px 0 0 0; color: #52b788; font-weight: 700; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase;">Field Scout Report</p>
+    return f"""<html>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7f9f7; padding: 16px; margin: 0; -webkit-font-smoothing: antialiased;">
+<div style="max-width: 560px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 12px 32px rgba(27, 67, 50, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);">
+  
+  <!-- Short Row Header (Saves vertical space) -->
+  <div style="background: #1b4332; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; color: #ffffff;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="font-size: 1.3rem; line-height: 1;">🌾</span>
+      <h2 style="margin: 0; font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em;">Robbie Williams Farms</h2>
     </div>
+    <span style="color: #52b788; font-weight: 700; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;">Field Scout Report</span>
+  </div>
 
-      <div style="padding:22px;">
-        <table style="width:100%;border-collapse:collapse;font-size:0.97rem;">
-          <tr><td style="padding:9px 10px;font-weight:700;color:#555;width:36%;
-                         border-bottom:1px solid #f0f0f0;">🏡 Farm</td>
-              <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;font-weight:600;">
-              {issue_data['farm']}</td></tr>
-          <tr style="background:#f9fbe7;">
-              <td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
-              📍 Location</td>
-              <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
-              {issue_data['location']}</td></tr>
-          <tr><td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
-              ⚠️ Issue</td>
-              <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
-              {issue_data['issue_type']}</td></tr>
-          <tr style="background:#f9fbe7;">
-              <td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
-              🔥 Severity</td>
-              <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;
-                         font-weight:700;color:{sev_color};">{issue_data['severity']}</td></tr>
-          <tr><td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
-              👤 Reporter</td>
-              <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
-              {issue_data['reporter']}</td></tr>
-          <tr style="background:#f9fbe7;">
-              <td style="padding:9px 10px;font-weight:700;color:#555;">🕒 Time</td>
-              <td style="padding:9px 10px;">{issue_data['timestamp']}</td></tr>
-          <tr><td style="padding:9px 10px;font-weight:700;color:#555;">🗺️ GPS</td>
-              <td style="padding:9px 10px;">
-              {issue_data.get('lat','N/A')}, {issue_data.get('lon','N/A')}{maps}</td></tr>
-        </table>
-        <div style="background:#fff8e1;border-left:4px solid #fb8c00;
-                    border-radius:8px;padding:14px;margin-top:16px;">
-          <strong>📝 Description:</strong><br>
-          <span style="font-size:0.97rem;line-height:1.6;">{issue_data['description']}</span>
-        </div>
-        <div style="margin-top:18px;">
-          <strong>📷 Photo:</strong><br>{photo_html}
-        </div>
-      </div>
-      <div style="background:#f1f8f4;padding:12px;text-align:center;
-                  font-size:0.78rem;color:#888;border-top:1px solid #e0e0e0;">
-        🌾 Robbie Williams Farms – Field Scout App | {issue_data['timestamp']}
-      </div>
+  <div style="padding: 20px;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 0.97rem;">
+      <tr>
+        <td style="padding: 9px 10px; font-weight: 700; color: #555; width: 36%; border-bottom: 1px solid #f0f0f0;">🏡 Farm</td>
+        <td style="padding: 9px 10px; border-bottom: 1px solid #f0f0f0; font-weight: 600;">{issue_data['farm']}</td>
+      </tr>
+      <tr style="background: #f9fbe7;">
+        <td style="padding: 9px 10px; font-weight: 700; color: #555; border-bottom: 1px solid #f0f0f0;">📍 Location</td>
+        <td style="padding: 9px 10px; border-bottom: 1px solid #f0f0f0;">{issue_data['location']}</td>
+      </tr>
+      <tr>
+        <td style="padding: 9px 10px; font-weight: 700; color: #555; border-bottom: 1px solid #f0f0f0;">⚠️ Issue</td>
+        <td style="padding: 9px 10px; border-bottom: 1px solid #f0f0f0;">{issue_data['issue_type']}</td>
+      </tr>
+      <tr style="background: #f9fbe7;">
+        <td style="padding: 9px 10px; font-weight: 700; color: #555; border-bottom: 1px solid #f0f0f0;">🔥 Severity</td>
+        <td style="padding: 9px 10px; border-bottom: 1px solid #f0f0f0; font-weight: 700; color: {sev_color};">{issue_data['severity']}</td>
+      </tr>
+      <tr>
+        <td style="padding: 9px 10px; font-weight: 700; color: #555; border-bottom: 1px solid #f0f0f0;">👤 Reporter</td>
+        <td style="padding: 9px 10px; border-bottom: 1px solid #f0f0f0;">{issue_data['reporter']}</td>
+      </tr>
+      <tr style="background: #f9fbe7;">
+        <td style="padding: 9px 10px; font-weight: 700; color: #555;">🕒 Time</td>
+        <td style="padding: 9px 10px;">{issue_data['timestamp']}</td>
+      </tr>
+      <tr>
+        <td style="padding: 9px 10px; font-weight: 700; color: #555;">🗺️ GPS</td>
+        <td style="padding: 9px 10px;">{issue_data.get('lat','N/A')}, {issue_data.get('lon','N/A')}{maps}</td>
+      </tr>
+    </table>
+    
+    <div style="background: #fff8e1; border-left: 4px solid #fb8c00; border-radius: 8px; padding: 14px; margin-top: 16px;">
+      <strong>📝 Description:</strong><br>
+      <span style="font-size: 0.97rem; line-height: 1.6;">{issue_data['description']}</span>
     </div>
-    </body></html>"""
+    
+    <div style="margin-top: 18px;">
+      <strong>📷 Photo:</strong><br>{photo_html}
+    </div>
+  </div>
+  
+  <div style="background: #f1f8f4; padding: 12px; text-align: center; font-size: 0.78rem; color: #888; border-top: 1px solid #e0e0e0;">
+    🌾 Robbie Williams Farms – Field Scout App | {issue_data['timestamp']}
+  </div>
+</div>
+</body>
+</html>"""
 
 def send_email(issue_data, photo_src, receiver):
     """Send email to any receiver using shared HTML builder."""
