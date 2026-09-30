@@ -236,7 +236,7 @@ def build_email_html(issue_data, photo_src):
       <div style="background:linear-gradient(135deg,#1b4332,#52b788);
                   padding:22px;text-align:center;color:white;">
         <!-- <div style="font-size:2rem;">🌾</div> -->
-        <h2 style="margin:4px 0 0 0;font-size:1.4rem;">Robbie Williams Farms</h2>
+        <h2 style="margin:4px 0 0 0;font-size:1.4rem;">🌾 Robbie Williams Farms</h2>
         <p style="margin:4px 0 0 0;opacity:0.85;font-size:0.95rem;letter-spacing:1px;">
           FIELD SCOUT REPORT</p>
       </div>
