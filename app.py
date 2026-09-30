@@ -688,42 +688,7 @@ def main():
     _, gsheet_ws  = get_gsheet()
 
     show_pdf_section()
-
-
-# ── TEMPORARY DEBUG BUTTON — remove after fixing ──
-if st.button("🔧 Test Google Sheet Connection"):
-    sheet_id     = get_secret("GSHEET_ID")
-    client_email = get_secret("CLIENT_EMAIL")
-    private_key  = get_secret("PRIVATE_KEY")
     
-    st.write("GSHEET_ID:", sheet_id)
-    st.write("CLIENT_EMAIL:", client_email)
-    st.write("PRIVATE_KEY starts with:", private_key[:40] if private_key else "MISSING")
-    
-    sh, ws = get_gsheet()
-    if ws:
-        st.success("✅ Connected to sheet!")
-        try:
-            ws.append_row(["TEST", "TEST FARM", "TEST LOCATION", "TEST ISSUE",
-                           "Test description", "Test User", "0.0", "0.0", "", "🟢 Low"])
-            st.success("✅ Row written successfully! Check your Google Sheet.")
-        except Exception as e:
-            st.error(f"❌ Write failed: {e}")
-    else:
-        st.error("❌ Could not connect to sheet.")
-
-
-
-
-
-
-
-
-
-
-
-
-
     params  = st.query_params
     gps_lat = params.get("lat", "")
     gps_lon = params.get("lon", "")
