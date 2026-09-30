@@ -46,6 +46,7 @@ st.markdown("""
         box-shadow: 0 3px 12px rgba(0,0,0,0.18);
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 10px;
     }
     .hero-left {
