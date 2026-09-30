@@ -230,16 +230,18 @@ def build_email_html(issue_data, photo_src):
         )
 
     return f"""
-    <html><body style="font-family:Segoe UI,sans-serif;background:#f0f4f0;padding:20px;">
-    <div style="max-width:600px;margin:auto;background:white;border-radius:16px;
-                overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12);">
-      <div style="background:linear-gradient(135deg,#1b4332,#52b788);
-                  padding:22px;text-align:center;color:white;">
-        <!-- <div style="font-size:2rem;">🌾</div> -->
-        <h2 style="margin:4px 0 0 0;font-size:1.4rem;">🌾 Robbie Williams Farms</h2>
-        <p style="margin:4px 0 0 0;opacity:0.85;font-size:0.95rem;letter-spacing:1px;">
-          FIELD SCOUT REPORT</p>
-      </div>
+<html>
+    <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7f9f7; padding: 40px 20px; margin: 0; -webkit-font-smoothing: antialiased;">
+    <div style="max-width: 560px; margin: 0 auto; background: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 12px 32px rgba(27, 67, 50, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);">
+    
+    <!-- Header Section -->
+    <div style="background: linear-gradient(145deg, #133024, #1b4332); padding: 32px 24px; text-align: center; color: #ffffff; position: relative;">
+      <!-- Subtle Decorative Accent Grid/Dot pattern alternative or clean graphic emoji anchor -->
+      <div style="font-size: 2.5rem; margin-bottom: 12px; line-height: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));">🌾</div>
+      <h2 style="margin: 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2;">Robbie Williams Farms</h2>
+      <p style="margin: 8px 0 0 0; color: #52b788; font-weight: 700; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase;">Field Scout Report</p>
+    </div>
+
       <div style="padding:22px;">
         <table style="width:100%;border-collapse:collapse;font-size:0.97rem;">
           <tr><td style="padding:9px 10px;font-weight:700;color:#555;width:36%;
