@@ -10,12 +10,11 @@ except ImportError:
 from google.oauth2.service_account import Credentials
 from PIL import Image
 import smtplib
-import datetime, zoneinfo
+import datetime
+import zoneinfo
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import datetime
 import io
-import json
 import os
 
 # ─────────────────────────────────────────────
@@ -39,99 +38,53 @@ st.markdown("""
     }
     .hero {
         background: linear-gradient(150deg, #1b4332 0%, #2d6a4f 45%, #52b788 100%);
-        border-radius: 20px;
-        padding: 30px 24px 22px 24px;
-        text-align: center;
-        margin-bottom: 6px;
+        border-radius: 20px; padding: 30px 24px 22px 24px;
+        text-align: center; margin-bottom: 6px;
         box-shadow: 0 6px 24px rgba(0,0,0,0.22);
-        position: relative;
-        overflow: hidden;
+        position: relative; overflow: hidden;
     }
-    .hero::before {
-        content: "";
-        position: absolute;
-        top: -40px; right: -40px;
-        width: 160px; height: 160px;
-        background: rgba(255,255,255,0.06);
-        border-radius: 50%;
-    }
-    .hero::after {
-        content: "";
-        position: absolute;
-        bottom: -50px; left: -30px;
-        width: 200px; height: 200px;
-        background: rgba(255,255,255,0.04);
-        border-radius: 50%;
-    }
-    .hero-icon  { font-size: 3rem; margin-bottom: 4px; line-height: 1; }
-    .hero-title {
-        font-size: 1.85rem; font-weight: 800; color: #ffffff;
-        margin: 0; letter-spacing: 0.5px;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-    .hero-sub {
-        font-size: 1rem; color: #b7e4c7; margin: 6px 0 0 0;
-        font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase;
-    }
-    .hero-divider {
-        width: 60px; height: 3px; background: #74c69d;
-        border-radius: 4px; margin: 12px auto 0 auto;
-    }
-    .tagline {
-        background: #d8f3dc; border-radius: 0 0 14px 14px;
-        text-align: center; padding: 8px 16px;
-        font-size: 0.88rem; color: #1b4332; font-weight: 600;
-        margin-bottom: 20px; letter-spacing: 0.3px;
-    }
-    .section-card {
-        background: #ffffff; border-left: 5px solid #52b788;
-        border-radius: 12px; padding: 14px 18px;
-        margin: 16px 0 8px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .section-title { font-size: 1.1rem; font-weight: 700; color: #1b4332; margin: 0; }
-    .step-badge {
-        display: inline-flex; align-items: center; justify-content: center;
-        background: #2d6a4f; color: white; border-radius: 50%;
-        width: 28px; height: 28px; font-weight: bold;
-        margin-right: 8px; font-size: 0.9rem; flex-shrink: 0;
-    }
-    .stButton > button {
-        width: 100%; height: 58px; font-size: 1.15rem; font-weight: 700;
-        border-radius: 14px;
-        background: linear-gradient(135deg, #1b4332, #2d6a4f);
-        color: white; border: none;
-        box-shadow: 0 5px 15px rgba(27,67,50,0.35);
-        transition: all 0.2s; letter-spacing: 0.3px;
-    }
-    .stButton > button:hover {
-        background: linear-gradient(135deg, #081c15, #1b4332);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(27,67,50,0.4);
-    }
-    .success-box {
-        background: linear-gradient(135deg, #d8f3dc, #b7e4c7);
-        border: 2px solid #52b788; border-radius: 16px;
-        padding: 22px; text-align: center; font-size: 1.05rem;
-        color: #1b4332; box-shadow: 0 4px 12px rgba(82,183,136,0.2);
-    }
-    .error-box {
-        background: #ffebee; border: 2px solid #e53935;
-        border-radius: 12px; padding: 14px;
-        font-size: 1rem; color: #b71c1c;
-    }
+    .hero::before { content:""; position:absolute; top:-40px; right:-40px;
+        width:160px; height:160px; background:rgba(255,255,255,0.06); border-radius:50%; }
+    .hero::after  { content:""; position:absolute; bottom:-50px; left:-30px;
+        width:200px; height:200px; background:rgba(255,255,255,0.04); border-radius:50%; }
+    .hero-icon  { font-size:3rem; margin-bottom:4px; line-height:1; }
+    .hero-title { font-size:1.85rem; font-weight:800; color:#ffffff; margin:0;
+        letter-spacing:0.5px; text-shadow:0 2px 8px rgba(0,0,0,0.3); }
+    .hero-sub   { font-size:1rem; color:#b7e4c7; margin:6px 0 0 0;
+        font-weight:500; letter-spacing:1.5px; text-transform:uppercase; }
+    .hero-divider { width:60px; height:3px; background:#74c69d;
+        border-radius:4px; margin:12px auto 0 auto; }
+    .tagline { background:#d8f3dc; border-radius:0 0 14px 14px;
+        text-align:center; padding:8px 16px; font-size:0.88rem;
+        color:#1b4332; font-weight:600; margin-bottom:20px; }
+    .section-card { background:#ffffff; border-left:5px solid #52b788;
+        border-radius:12px; padding:14px 18px;
+        margin:16px 0 8px 0; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+    .section-title { font-size:1.1rem; font-weight:700; color:#1b4332; margin:0; }
+    .step-badge { display:inline-flex; align-items:center; justify-content:center;
+        background:#2d6a4f; color:white; border-radius:50%;
+        width:28px; height:28px; font-weight:bold;
+        margin-right:8px; font-size:0.9rem; flex-shrink:0; }
+    .stButton > button { width:100%; height:58px; font-size:1.15rem; font-weight:700;
+        border-radius:14px; background:linear-gradient(135deg,#1b4332,#2d6a4f);
+        color:white; border:none; box-shadow:0 5px 15px rgba(27,67,50,0.35);
+        transition:all 0.2s; letter-spacing:0.3px; }
+    .stButton > button:hover { background:linear-gradient(135deg,#081c15,#1b4332);
+        transform:translateY(-2px); box-shadow:0 8px 20px rgba(27,67,50,0.4); }
+    .success-box { background:linear-gradient(135deg,#d8f3dc,#b7e4c7);
+        border:2px solid #52b788; border-radius:16px; padding:22px;
+        text-align:center; font-size:1.05rem; color:#1b4332;
+        box-shadow:0 4px 12px rgba(82,183,136,0.2); }
+    .error-box { background:#ffebee; border:2px solid #e53935;
+        border-radius:12px; padding:14px; font-size:1rem; color:#b71c1c; }
     .stSelectbox > div > div,
     .stTextArea > div > textarea,
-    .stTextInput > div > input {
-        font-size: 1.05rem !important; border-radius: 10px !important;
-    }
-    .footer {
-        text-align: center; color: #95a5a6; font-size: 0.8rem;
-        margin-top: 36px; padding-bottom: 24px;
-        border-top: 1px solid #e8f5e9; padding-top: 16px;
-    }
-    .footer strong { color: #2d6a4f; }
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
+    .stTextInput > div > input { font-size:1.05rem !important; border-radius:10px !important; }
+    .footer { text-align:center; color:#95a5a6; font-size:0.8rem;
+        margin-top:36px; padding-bottom:24px;
+        border-top:1px solid #e8f5e9; padding-top:16px; }
+    .footer strong { color:#2d6a4f; }
+    #MainMenu {visibility:hidden;} footer {visibility:hidden;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -144,6 +97,14 @@ def get_secret(key, default=None):
     except Exception:
         return os.environ.get(key, default)
 
+def get_timestamp():
+    try:
+        return datetime.datetime.now(
+            zoneinfo.ZoneInfo("America/Chicago")
+        ).strftime("%Y-%m-%d %H:%M:%S CDT")
+    except Exception:
+        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
 # ─────────────────────────────────────────────
 #  CLOUDINARY
 # ─────────────────────────────────────────────
@@ -152,7 +113,6 @@ def setup_cloudinary():
         return False
     cn  = get_secret("CLOUDINARY_CLOUD_NAME")
     ak  = get_secret("CLOUDINARY_API_KEY")
-    # ✅ BUG FIX 1: was "CLOUDINARY_API_SECRET " (trailing space) — now correct
     ase = get_secret("CLOUDINARY_API_SECRET")
     if cn and ak and ase:
         cloudinary.config(cloud_name=cn, api_key=ak, api_secret=ase)
@@ -193,15 +153,10 @@ def image_to_b64(raw):
         return ""
 
 # ─────────────────────────────────────────────
-#  GOOGLE SHEETS  — same approach as Wheat Contest app
-#  Secrets needed:
-#    GSHEET_ID     = "your_sheet_id"
-#    CLIENT_EMAIL  = "farm-scout@farm-scout-510216.iam.gserviceaccount.com"
-#    PRIVATE_KEY   = "-----BEGIN PRIVATE KEY-----\nMII...\n-----END PRIVATE KEY-----\n"
+#  GOOGLE SHEETS
 # ─────────────────────────────────────────────
 def get_gsheet():
     try:
-        # Read each credential separately — same as Wheat Contest
         sheet_id     = get_secret("GSHEET_ID")
         client_email = get_secret("CLIENT_EMAIL")
         private_key  = get_secret("PRIVATE_KEY")
@@ -210,7 +165,6 @@ def get_gsheet():
             st.error("❌ Missing one of: GSHEET_ID, CLIENT_EMAIL, PRIVATE_KEY")
             return None, None
 
-        # Build credentials dict directly — no JSON parsing needed
         creds_dict = {
             "type":                        "service_account",
             "project_id":                  "farm-scout-510216",
@@ -242,11 +196,9 @@ def get_gsheet():
                 "Photo URL", "Severity"
             ])
         return sh, ws
-
     except Exception as e:
         st.error(f"❌ Sheet connection error: {e}")
         return None, None
-
 
 def save_to_gsheet(ws, row):
     try:
@@ -257,245 +209,102 @@ def save_to_gsheet(ws, row):
         return False
 
 # ─────────────────────────────────────────────
-#  EMAIL SHAMIM
+#  EMAIL  (shared HTML builder)
 # ─────────────────────────────────────────────
-def send_email_shamim(issue_data, photo_src):
+def build_email_html(issue_data, photo_src):
+    sev_color = {
+        "🔴 High – Urgent":    "#c62828",
+        "🟡 Medium – Monitor": "#f9a825",
+        "🟢 Low – Note it":    "#2e7d32",
+    }.get(issue_data["severity"], "#555")
+
+    photo_html = (
+        f'<img src="{photo_src}" style="max-width:420px;border-radius:10px;margin-top:10px;"/>'
+        if photo_src else "<em>No photo submitted.</em>"
+    )
+    maps = ""
+    if issue_data.get("lat") not in ("N/A", ""):
+        maps = (
+            f'<br><a href="https://maps.google.com/?q={issue_data["lat"]},{issue_data["lon"]}" '
+            f'style="color:#1976d2;">📍 View on Google Maps</a>'
+        )
+
+    return f"""
+    <html><body style="font-family:Segoe UI,sans-serif;background:#f0f4f0;padding:20px;">
+    <div style="max-width:600px;margin:auto;background:white;border-radius:16px;
+                overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12);">
+      <div style="background:linear-gradient(135deg,#1b4332,#52b788);
+                  padding:22px;text-align:center;color:white;">
+        <div style="font-size:2rem;">🌾</div>
+        <h2 style="margin:4px 0 0 0;font-size:1.4rem;">Robbie Williams Farms</h2>
+        <p style="margin:4px 0 0 0;opacity:0.85;font-size:0.95rem;letter-spacing:1px;">
+          FIELD SCOUT REPORT</p>
+      </div>
+      <div style="padding:22px;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.97rem;">
+          <tr><td style="padding:9px 10px;font-weight:700;color:#555;width:36%;
+                         border-bottom:1px solid #f0f0f0;">🏡 Farm</td>
+              <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;font-weight:600;">
+              {issue_data['farm']}</td></tr>
+          <tr style="background:#f9fbe7;">
+              <td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
+              📍 Location</td>
+              <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
+              {issue_data['location']}</td></tr>
+          <tr><td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
+              ⚠️ Issue</td>
+              <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
+              {issue_data['issue_type']}</td></tr>
+          <tr style="background:#f9fbe7;">
+              <td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
+              🔥 Severity</td>
+              <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;
+                         font-weight:700;color:{sev_color};">{issue_data['severity']}</td></tr>
+          <tr><td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
+              👤 Reporter</td>
+              <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
+              {issue_data['reporter']}</td></tr>
+          <tr style="background:#f9fbe7;">
+              <td style="padding:9px 10px;font-weight:700;color:#555;">🕒 Time</td>
+              <td style="padding:9px 10px;">{issue_data['timestamp']}</td></tr>
+          <tr><td style="padding:9px 10px;font-weight:700;color:#555;">🗺️ GPS</td>
+              <td style="padding:9px 10px;">
+              {issue_data.get('lat','N/A')}, {issue_data.get('lon','N/A')}{maps}</td></tr>
+        </table>
+        <div style="background:#fff8e1;border-left:4px solid #fb8c00;
+                    border-radius:8px;padding:14px;margin-top:16px;">
+          <strong>📝 Description:</strong><br>
+          <span style="font-size:0.97rem;line-height:1.6;">{issue_data['description']}</span>
+        </div>
+        <div style="margin-top:18px;">
+          <strong>📷 Photo:</strong><br>{photo_html}
+        </div>
+      </div>
+      <div style="background:#f1f8f4;padding:12px;text-align:center;
+                  font-size:0.78rem;color:#888;border-top:1px solid #e0e0e0;">
+        🌾 Robbie Williams Farms – Field Scout App | {issue_data['timestamp']}
+      </div>
+    </div>
+    </body></html>"""
+
+def send_email(issue_data, photo_src, receiver):
+    """Send email to any receiver using shared HTML builder."""
     try:
         sender   = get_secret("EMAIL_SENDER")
         password = get_secret("EMAIL_PASSWORD")
-        receiver = get_secret("EMAIL_RECEIVER")
         if not all([sender, password, receiver]):
             return False, "Email secrets missing"
-
         msg = MIMEMultipart("alternative")
         msg["Subject"] = f"🚨 Scout Report – {issue_data['farm']} | {issue_data['issue_type']}"
         msg["From"]    = sender
         msg["To"]      = receiver
-
-        sev_color = {
-            "🔴 High – Urgent":    "#c62828",
-            "🟡 Medium – Monitor": "#f9a825",
-            "🟢 Low – Note it":    "#2e7d32",
-        }.get(issue_data["severity"], "#555")
-
-        photo_html = (
-            f'<img src="{photo_src}" style="max-width:420px;border-radius:10px;margin-top:10px;"/>'
-            if photo_src else "<em>No photo submitted.</em>"
-        )
-        maps = ""
-        if issue_data.get("lat") not in ("N/A", ""):
-            maps = (
-                f'<br><a href="https://maps.google.com/?q={issue_data["lat"]},{issue_data["lon"]}" '
-                f'style="color:#1976d2;">📍 View on Google Maps</a>'
-            )
-
-        html = f"""
-        <html><body style="font-family:Segoe UI,sans-serif;background:#f0f4f0;padding:20px;">
-        <div style="max-width:600px;margin:auto;background:white;border-radius:16px;
-                    overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12);">
-          <div style="background:linear-gradient(135deg,#1b4332,#52b788);
-                      padding:22px;text-align:center;color:white;">
-            <div style="font-size:2rem;">🌾</div>
-            <h2 style="margin:4px 0 0 0;font-size:1.4rem;">Robbie Williams Farms</h2>
-            <p style="margin:4px 0 0 0;opacity:0.85;font-size:0.95rem;letter-spacing:1px;">
-              FIELD SCOUT REPORT</p>
-          </div>
-          <div style="padding:22px;">
-            <table style="width:100%;border-collapse:collapse;font-size:0.97rem;">
-              <tr><td style="padding:9px 10px;font-weight:700;color:#555;width:36%;
-                             border-bottom:1px solid #f0f0f0;">🏡 Farm</td>
-                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;font-weight:600;">
-                  {issue_data['farm']}</td></tr>
-              <tr style="background:#f9fbe7;">
-                  <td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
-                  📍 Location</td>
-                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
-                  {issue_data['location']}</td></tr>
-              <tr><td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
-                  ⚠️ Issue</td>
-                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
-                  {issue_data['issue_type']}</td></tr>
-              <tr style="background:#f9fbe7;">
-                  <td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
-                  🔥 Severity</td>
-                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;
-                             font-weight:700;color:{sev_color};">{issue_data['severity']}</td></tr>
-              <tr><td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
-                  👤 Reporter</td>
-                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
-                  {issue_data['reporter']}</td></tr>
-              <tr style="background:#f9fbe7;">
-                  <td style="padding:9px 10px;font-weight:700;color:#555;">🕒 Time</td>
-                  <td style="padding:9px 10px;">{issue_data['timestamp']}</td></tr>
-              <tr><td style="padding:9px 10px;font-weight:700;color:#555;">🗺️ GPS</td>
-                  <td style="padding:9px 10px;">
-                  {issue_data.get('lat','N/A')}, {issue_data.get('lon','N/A')}{maps}</td></tr>
-            </table>
-            <div style="background:#fff8e1;border-left:4px solid #fb8c00;
-                        border-radius:8px;padding:14px;margin-top:16px;">
-              <strong>📝 Description:</strong><br>
-              <span style="font-size:0.97rem;line-height:1.6;">{issue_data['description']}</span>
-            </div>
-            <div style="margin-top:18px;">
-              <strong>📷 Photo:</strong><br>{photo_html}
-            </div>
-          </div>
-          <div style="background:#f1f8f4;padding:12px;text-align:center;
-                      font-size:0.78rem;color:#888;border-top:1px solid #e0e0e0;">
-            🌾 Robbie Williams Farms – Field Scout App | {issue_data['timestamp']}
-          </div>
-        </div>
-        </body></html>"""
-
-        msg.attach(MIMEText(html, "html"))
+        msg.attach(MIMEText(build_email_html(issue_data, photo_src), "html"))
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(sender, password)
             server.sendmail(sender, receiver, msg.as_string())
         return True, "OK"
     except Exception as e:
         return False, str(e)
-
-
-# ─────────────────────────────────────────────
-#  EMAIL ROBBIE
-# ─────────────────────────────────────────────
-def send_email_robbie(issue_data, photo_src):
-    try:
-        sender   = get_secret("EMAIL_SENDER")
-        password = get_secret("EMAIL_PASSWORD")
-        receiver2 = get_secret("EMAIL_RECEIVER2")
-        if not all([sender, password, receiver2]):
-            return False, "Email secrets missing"
-
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = f"🚨 Scout Report – {issue_data['farm']} | {issue_data['issue_type']}"
-        msg["From"]    = sender
-        msg["To"]      = receiver2
-
-        sev_color = {
-            "🔴 High – Urgent":    "#c62828",
-            "🟡 Medium – Monitor": "#f9a825",
-            "🟢 Low – Note it":    "#2e7d32",
-        }.get(issue_data["severity"], "#555")
-
-        photo_html = (
-            f'<img src="{photo_src}" style="max-width:420px;border-radius:10px;margin-top:10px;"/>'
-            if photo_src else "<em>No photo submitted.</em>"
-        )
-        maps = ""
-        if issue_data.get("lat") not in ("N/A", ""):
-            maps = (
-                f'<br><a href="https://maps.google.com/?q={issue_data["lat"]},{issue_data["lon"]}" '
-                f'style="color:#1976d2;">📍 View on Google Maps</a>'
-            )
-
-        html = f"""
-        <html><body style="font-family:Segoe UI,sans-serif;background:#f0f4f0;padding:20px;">
-        <div style="max-width:600px;margin:auto;background:white;border-radius:16px;
-                    overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12);">
-          <div style="background:linear-gradient(135deg,#1b4332,#52b788);
-                      padding:22px;text-align:center;color:white;">
-            <div style="font-size:2rem;">🌾</div>
-            <h2 style="margin:4px 0 0 0;font-size:1.4rem;">Robbie Williams Farms</h2>
-            <p style="margin:4px 0 0 0;opacity:0.85;font-size:0.95rem;letter-spacing:1px;">
-              FIELD SCOUT REPORT</p>
-          </div>
-          <div style="padding:22px;">
-            <table style="width:100%;border-collapse:collapse;font-size:0.97rem;">
-              <tr><td style="padding:9px 10px;font-weight:700;color:#555;width:36%;
-                             border-bottom:1px solid #f0f0f0;">🏡 Farm</td>
-                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;font-weight:600;">
-                  {issue_data['farm']}</td></tr>
-              <tr style="background:#f9fbe7;">
-                  <td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
-                  📍 Location</td>
-                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
-                  {issue_data['location']}</td></tr>
-              <tr><td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
-                  ⚠️ Issue</td>
-                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
-                  {issue_data['issue_type']}</td></tr>
-              <tr style="background:#f9fbe7;">
-                  <td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
-                  🔥 Severity</td>
-                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;
-                             font-weight:700;color:{sev_color};">{issue_data['severity']}</td></tr>
-              <tr><td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
-                  👤 Reporter</td>
-                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
-                  {issue_data['reporter']}</td></tr>
-              <tr style="background:#f9fbe7;">
-                  <td style="padding:9px 10px;font-weight:700;color:#555;">🕒 Time</td>
-                  <td style="padding:9px 10px;">{issue_data['timestamp']}</td></tr>
-              <tr><td style="padding:9px 10px;font-weight:700;color:#555;">🗺️ GPS</td>
-                  <td style="padding:9px 10px;">
-                  {issue_data.get('lat','N/A')}, {issue_data.get('lon','N/A')}{maps}</td></tr>
-            </table>
-            <div style="background:#fff8e1;border-left:4px solid #fb8c00;
-                        border-radius:8px;padding:14px;margin-top:16px;">
-              <strong>📝 Description:</strong><br>
-              <span style="font-size:0.97rem;line-height:1.6;">{issue_data['description']}</span>
-            </div>
-            <div style="margin-top:18px;">
-              <strong>📷 Photo:</strong><br>{photo_html}
-            </div>
-          </div>
-          <div style="background:#f1f8f4;padding:12px;text-align:center;
-                      font-size:0.78rem;color:#888;border-top:1px solid #e0e0e0;">
-            🌾 Robbie Williams Farms – Field Scout App | {issue_data['timestamp']}
-          </div>
-        </div>
-        </body></html>"""
-
-        msg.attach(MIMEText(html, "html"))
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(sender, password)
-            server.sendmail(sender, receiver2, msg.as_string())
-        return True, "OK"
-    except Exception as e:
-        return False, str(e)
-
-    
-
-# ─────────────────────────────────────────────
-#  SMS  (email-to-SMS gateway)
-# ─────────────────────────────────────────────
-# def send_sms(issue_data):
-#     try:
-#         sender      = get_secret("EMAIL_SENDER")
-#         password    = get_secret("EMAIL_PASSWORD")
-#         # ✅ BUG FIX 3: was "SMS_ADDRESS " (trailing space) — now correct
-#         sms_address = get_secret("SMS_ADDRESS")
-#         if not all([sender, password, sms_address]):
-#             return False, "SMS_ADDRESS secret missing"
-
-#         sev_icon = {
-#             "🔴 High – Urgent":    "🔴 URGENT",
-#             "🟡 Medium – Monitor": "🟡 Monitor",
-#             "🟢 Low – Note it":    "🟢 Low",
-#         }.get(issue_data["severity"], issue_data["severity"])
-
-#         body = (
-#             f"🌾 Farm Scout Alert\n"
-#             f"{sev_icon}\n"
-#             f"Farm: {issue_data['farm'][:40]}\n"
-#             f"Spot: {issue_data['location']}\n"
-#             f"Issue: {issue_data['issue_type']}\n"
-#             f"By: {issue_data['reporter']}\n"
-#             f"{issue_data['description'][:80]}"
-#         )
-
-#         msg            = MIMEText(body)
-#         msg["From"]    = sender
-#         msg["To"]      = sms_address
-#         msg["Subject"] = ""
-
-#         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-#             server.login(sender, password)
-#             server.sendmail(sender, sms_address, msg.as_string())
-#         return True, "OK"
-#     except Exception as e:
-#         return False, str(e)
 
 # ─────────────────────────────────────────────
 #  LISTS
@@ -581,7 +390,8 @@ FARM_SIDES = [
 ]
 
 # ─────────────────────────────────────────────
-#  GPS HTML
+#  GPS  — uses st.components.v1.html (supports JS)
+#          with full page reload to fill lat/lon
 # ─────────────────────────────────────────────
 GPS_HTML = """
 <div id="gps_status" style="margin:6px 0;">
@@ -593,11 +403,12 @@ GPS_HTML = """
   </button>
   <div id="coords" style="margin-top:10px;font-size:0.95rem;color:#333;"></div>
   <div id="gps_help" style="display:none;background:#fff8e1;border:1px solid #f9a825;
-       border-radius:10px;padding:12px;margin-top:10px;font-size:0.88rem;color:#555;line-height:1.7;">
+       border-radius:10px;padding:12px;margin-top:10px;font-size:0.88rem;
+       color:#555;line-height:1.7;">
     <strong>📋 How to allow location:</strong><br>
     <b>iPhone:</b> Settings → Safari → Location → Allow<br>
     <b>Android:</b> Tap 🔒 in address bar → Site Settings → Location → Allow<br><br>
-    <strong>📍 Manual option:</strong> Open
+    <strong>📍 Manual:</strong> Open
     <a href="https://maps.google.com" target="_blank" style="color:#1976d2;">Google Maps</a>,
     long-press your spot → copy the numbers at the top.
   </div>
@@ -605,32 +416,29 @@ GPS_HTML = """
 <script>
 function getLocation() {
   var btn  = document.getElementById('gps_btn');
-  var help = document.getElementById('gps_help');
   var info = document.getElementById('coords');
+  var help = document.getElementById('gps_help');
   btn.textContent = '⏳ Getting location…';
   btn.disabled = true;
   help.style.display = 'none';
+
   if (!navigator.geolocation) {
     info.innerHTML = '❌ GPS not supported. Enter coordinates manually below.';
     help.style.display = 'block';
     btn.textContent = '📡 GPS Not Available';
+    btn.disabled = false;
     return;
   }
+
   navigator.geolocation.getCurrentPosition(
     function(pos) {
       var lat = pos.coords.latitude.toFixed(6);
       var lon = pos.coords.longitude.toFixed(6);
-      var acc = Math.round(pos.coords.accuracy);
-      info.innerHTML = '✅ <strong style="color:#1b4332;">Location captured!</strong><br>' +
-        '📍 Lat: <strong>' + lat + '</strong> &nbsp;|&nbsp; Lon: <strong>' + lon + '</strong>' +
-        ' <span style="color:#999;font-size:0.82rem;">(±' + acc + 'm)</span>';
-      var url = new URL(window.location.href);
+      // ✅ Full page reload with GPS params — Streamlit picks them up automatically
+      var url = new URL(window.parent.location.href);
       url.searchParams.set('lat', lat);
       url.searchParams.set('lon', lon);
-      window.history.replaceState({}, '', url);
-      btn.textContent = '✅ Location Captured — Tap to Refresh';
-      btn.style.background = 'linear-gradient(135deg,#1b5e20,#2e7d32)';
-      btn.disabled = false;
+      window.parent.location.href = url.toString();
     },
     function(err) {
       var msgs = {
@@ -689,9 +497,15 @@ def main():
 
     show_pdf_section()
 
+    # ── Read GPS from URL params ──────────────
+    # ✅ FIX: read lat/lon from query params and pre-fill inputs
     params  = st.query_params
     gps_lat = params.get("lat", "")
     gps_lon = params.get("lon", "")
+
+    # Show green banner if GPS was just captured
+    if gps_lat and gps_lon:
+        st.success(f"📍 GPS captured: **{gps_lat}**, **{gps_lon}** — coordinates filled below ✅")
 
     # STEP 1
     st.markdown("""
@@ -703,113 +517,20 @@ def main():
     farm_selected = st.selectbox("🏡 Choose Farm", FARMS, index=0)
     side_selected = st.selectbox("📍 Which Part of the Farm?", FARM_SIDES, index=0)
 
+    # ── GPS button ────────────────────────────
     st.markdown("**📡 GPS Coordinates** — tap the button below on your phone")
+    # ✅ KEY FIX: use st.components.v1.html — it runs JavaScript correctly
+    # st.html() does NOT support JS; st.iframe() is for URLs not HTML strings
+    st.components.v1.html(GPS_HTML, height=160)
 
-    # Initialize session state for GPS
-    if "gps_lat" not in st.session_state:
-        st.session_state.gps_lat = ""
-    if "gps_lon" not in st.session_state:
-        st.session_state.gps_lon = ""
-
-    # GPS button using streamlit-js-eval style — triggers page rerun via query params
-    GPS_HTML = """
-    <div id="gps_wrap" style="margin:6px 0;">
-    <button onclick="getLocation()" id="gps_btn"
-        style="background:linear-gradient(135deg,#1b4332,#2d6a4f);color:white;border:none;
-            border-radius:12px;padding:14px 18px;font-size:1.05rem;font-weight:700;
-            cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(27,67,50,0.3);">
-        📡 Tap to Get My GPS Location
-    </button>
-    <div id="gps_info" style="margin-top:10px;font-size:0.95rem;color:#333;"></div>
-    <div id="gps_help" style="display:none;background:#fff8e1;border:1px solid #f9a825;
-        border-radius:10px;padding:12px;margin-top:10px;font-size:0.88rem;
-        color:#555;line-height:1.7;">
-        <strong>📋 How to allow location:</strong><br>
-        <b>iPhone:</b> Settings → Safari → Location → Allow<br>
-        <b>Android:</b> Tap 🔒 in address bar → Site Settings → Location → Allow<br><br>
-        <strong>📍 Manual:</strong> Open
-        <a href="https://maps.google.com" target="_blank" style="color:#1976d2;">Google Maps</a>,
-        long-press your spot → copy the numbers shown.
-    </div>
-    </div>
-    <script>
-    function getLocation() {
-    var btn  = document.getElementById('gps_btn');
-    var info = document.getElementById('gps_info');
-    var help = document.getElementById('gps_help');
-    btn.innerHTML = '⏳ Getting location…';
-    btn.disabled = true;
-    help.style.display = 'none';
-
-    if (!navigator.geolocation) {
-        info.innerHTML = '❌ GPS not supported on this browser.';
-        help.style.display = 'block';
-        btn.innerHTML = '📡 GPS Not Available';
-        btn.disabled = false;
-        return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-        function(pos) {
-        var lat = pos.coords.latitude.toFixed(6);
-        var lon = pos.coords.longitude.toFixed(6);
-        var acc = Math.round(pos.coords.accuracy);
-
-        // Show success in the JS panel
-        info.innerHTML =
-            '✅ <strong style="color:#1b4332;">Location captured!</strong><br>' +
-            '📍 Lat: <strong>' + lat + '</strong> &nbsp;|&nbsp; ' +
-            'Lon: <strong>' + lon + '</strong>' +
-            ' <span style="color:#999;font-size:0.82rem;">(±' + acc + 'm)</span>';
-
-        // ✅ FIX: trigger Streamlit rerun by updating URL params
-        // AND directly update the Streamlit input fields via DOM
-        var url = new URL(window.location.href);
-        url.searchParams.set('gps_lat', lat);
-        url.searchParams.set('gps_lon', lon);
-        window.location.href = url.toString();  // full reload with params = Streamlit picks them up
-        },
-        function(err) {
-        var msgs = {
-            1: '🚫 Location blocked. See help below, then tap again.',
-            2: '📶 Location unavailable. Try moving outside.',
-            3: '⏱️ Timed out. Try again or enter manually below.'
-        };
-        info.innerHTML = '<span style="color:#c62828;">' +
-            (msgs[err.code] || '❌ ' + err.message) + '</span>';
-        help.style.display = 'block';
-        btn.innerHTML = '📡 Tap to Retry GPS';
-        btn.disabled = false;
-        },
-        {enableHighAccuracy: true, timeout: 12000, maximumAge: 0}
-    );
-    }
-    </script>
-    """
-
-    st.iframe(GPS_HTML, height = 120)
-
-    # ✅ FIX: Read GPS from URL params and store in session_state
-    params = st.query_params
-    if params.get("gps_lat") and params.get("gps_lon"):
-        st.session_state.gps_lat = params.get("gps_lat")
-        st.session_state.gps_lon = params.get("gps_lon")
-        # Show green confirmation that GPS was captured
-        st.success(f"📍 GPS captured: **{st.session_state.gps_lat}**, **{st.session_state.gps_lon}**")
-
-    st.caption("🔒 GPS blocked? Enter coordinates manually (Google Maps → long-press your spot → copy numbers).")
+    st.caption("🔒 GPS blocked? Enter coordinates manually (Google Maps → long-press → copy numbers).")
 
     lat_col, lon_col = st.columns(2)
     with lat_col:
-        # ✅ FIX: pre-fill from session_state so GPS values appear automatically
-        lat_input = st.text_input("Latitude",
-                                value=st.session_state.gps_lat,
-                                placeholder="e.g. 37.989450")
+        # ✅ FIX: pre-filled from URL params after GPS capture
+        lat_input = st.text_input("Latitude",  value=gps_lat, placeholder="e.g. 37.989450")
     with lon_col:
-        lon_input = st.text_input("Longitude",
-                                value=st.session_state.gps_lon,
-                                placeholder="e.g. -87.590321")
-
+        lon_input = st.text_input("Longitude", value=gps_lon, placeholder="e.g. -87.590321")
 
     # STEP 2
     st.markdown("""
@@ -826,7 +547,7 @@ def main():
     )
     description = st.text_area(
         "📝 Describe the problem",
-        placeholder="e.g. Yellowing leaves on the north corner, about 10 rows affected. Looks like nitrogen deficiency.",
+        placeholder="e.g. Yellowing leaves on the north corner, about 10 rows affected.",
         height=130,
     )
 
@@ -848,7 +569,7 @@ def main():
     )
     if photo_file:
         try:
-            st.image(Image.open(photo_file), caption="📷 Photo Preview", width='stretch')
+            st.image(Image.open(photo_file), caption="📷 Photo Preview", use_container_width=True)
         except Exception:
             st.warning("Could not preview photo, but it will still be submitted.")
 
@@ -863,7 +584,7 @@ def main():
 
     st.markdown("---")
 
-    if st.button("🚀 Submit Scout Report", width='stretch'):
+    if st.button("🚀 Submit Scout Report", use_container_width=True):
 
         errors = []
         if farm_selected.startswith("🌱"):  errors.append("Please select a farm.")
@@ -881,11 +602,11 @@ def main():
             st.stop()
 
         progress  = st.progress(0, text="Submitting…")
-
-        timestamp = datetime.datetime.now(zoneinfo.ZoneInfo("America/Chicago")).strftime("%Y-%m-%d %H:%M:%S CDT")
+        timestamp = get_timestamp()
         photo_url = ""
         photo_b64 = ""
 
+        # Upload photo
         progress.progress(20, text="Uploading photo…")
         if photo_file:
             photo_file.seek(0)
@@ -901,13 +622,19 @@ def main():
                 photo_url = "embedded-in-email"
 
         issue_data = {
-            "farm": farm_selected, "location": side_selected,
-            "issue_type": issue_type, "severity": severity,
-            "description": description.strip(), "reporter": reporter_name.strip(),
-            "lat": lat_input or "N/A", "lon": lon_input or "N/A",
-            "timestamp": timestamp, "photo_url": photo_url,
+            "farm":        farm_selected,
+            "location":    side_selected,
+            "issue_type":  issue_type,
+            "severity":    severity,
+            "description": description.strip(),
+            "reporter":    reporter_name.strip(),
+            "lat":         lat_input or "N/A",
+            "lon":         lon_input or "N/A",
+            "timestamp":   timestamp,
+            "photo_url":   photo_url,
         }
 
+        # Google Sheets
         progress.progress(50, text="Saving record…")
         sheet_ok = False
         if gsheet_ws:
@@ -917,18 +644,21 @@ def main():
                 lat_input or "N/A", lon_input or "N/A", photo_url, severity,
             ])
 
+        # Emails
         progress.progress(75, text="Sending notifications…")
         email_src = (
             photo_url if (photo_url and not photo_url.startswith("ERROR")
                           and photo_url != "embedded-in-email")
             else photo_b64
         )
-        email_ok, email_msg = send_email_shamim(issue_data, email_src)
-        email_rob_ok, email_msg_rob = send_email_robbie(issue_data, email_src)
-        # sms_ok,   sms_msg   = send_sms(issue_data)
+        receiver1    = get_secret("EMAIL_RECEIVER",  "")
+        receiver2    = get_secret("EMAIL_RECEIVER2", "")
+        email1_ok, email1_msg = send_email(issue_data, email_src, receiver1)
+        email2_ok, email2_msg = send_email(issue_data, email_src, receiver2)
 
         progress.progress(100, text="Done!")
 
+        # Status lines
         lines = []
         if not photo_file:
             lines.append("📷 No photo submitted")
@@ -939,10 +669,9 @@ def main():
         else:
             lines.append("⚠️ Photo could not be processed")
 
-        lines.append("✅ Record saved to Google Sheets" if sheet_ok else "⚠️ Sheet not saved – check config")
-        lines.append("✅ Email notification sent"        if email_ok else f"⚠️ Email not sent ({email_msg})")
-        # lines.append("✅ Email notification sent"        if email_rob_ok else f"⚠️ Email not sent ({email_msg_rob})")
-        # lines.append("✅ Text message sent"              if sms_ok   else f"⚠️ SMS not sent ({sms_msg})")
+        lines.append("✅ Record saved to Google Sheets" if sheet_ok  else "⚠️ Sheet not saved – check config")
+        lines.append("✅ Email sent to Shamim"          if email1_ok else f"⚠️ Email 1 not sent ({email1_msg})")
+        lines.append("✅ Email sent to Robbie"          if email2_ok else f"⚠️ Email 2 not sent ({email2_msg})")
 
         st.markdown(f"""
         <div class="success-box">
@@ -954,9 +683,7 @@ def main():
         </div>
         """, unsafe_allow_html=True)
 
-        # if photo_url and not photo_url.startswith("ERROR") and photo_url != "embedded-in-email":
-        #     st.image(photo_url, caption="📷 Saved Photo", width='stretch')
-
+        # Clear GPS params after submit
         st.query_params.clear()
 
     st.markdown("""
