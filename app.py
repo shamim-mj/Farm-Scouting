@@ -198,24 +198,12 @@ def get_gsheet():
     try:
         creds_raw = get_secret("GSHEET_CREDENTIALS")
         if not creds_raw:
+            st.error("GSHEET_CREDENTIALS secret is missing!")
             return None, None
-        # ✅ BUG FIX 2: handle both dict (from TOML) and JSON string
-        if isinstance(creds_raw, str):
-            creds_dict = json.loads(creds_raw)
-        else:
-            # Streamlit parses TOML inline tables as AttrDict — convert properly
-            creds_dict = {
-                "type":                        creds_raw["type"],
-                "project_id":                  creds_raw["project_id"],
-                "private_key_id":              creds_raw["private_key_id"],
-                "private_key":                 creds_raw["private_key"],
-                "client_email":                creds_raw["client_email"],
-                "client_id":                   creds_raw["client_id"],
-                "auth_uri":                    creds_raw["auth_uri"],
-                "token_uri":                   creds_raw["token_uri"],
-                "auth_provider_x509_cert_url": creds_raw.get("auth_provider_x509_cert_url", ""),
-                "client_x509_cert_url":        creds_raw.get("client_x509_cert_url", ""),
-            }
+
+        # Simple JSON parse — \n in key is already correct
+        creds_dict = json.loads(creds_raw)
+
         scopes = [
             "https://www.googleapis.com/auth/spreadsheets",
             "https://www.googleapis.com/auth/drive",
@@ -236,14 +224,6 @@ def get_gsheet():
     except Exception as e:
         st.error(f"Sheet connection error: {e}")
         return None, None
-
-def save_to_gsheet(ws, row):
-    try:
-        ws.append_row(row)
-        return True
-    except Exception as e:
-        st.error(f"Sheet SAVE error: {e}")
-        return False
 
 # ─────────────────────────────────────────────
 #  EMAIL
