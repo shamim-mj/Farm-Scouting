@@ -688,7 +688,7 @@ def main():
     _, gsheet_ws  = get_gsheet()
 
     show_pdf_section()
-    
+
     params  = st.query_params
     gps_lat = params.get("lat", "")
     gps_lon = params.get("lon", "")
@@ -856,8 +856,8 @@ def main():
         </div>
         """, unsafe_allow_html=True)
 
-        if photo_url and not photo_url.startswith("ERROR") and photo_url != "embedded-in-email":
-            st.image(photo_url, caption="📷 Saved Photo", width='stretch')
+        # if photo_url and not photo_url.startswith("ERROR") and photo_url != "embedded-in-email":
+        #     st.image(photo_url, caption="📷 Saved Photo", width='stretch')
 
         st.query_params.clear()
 
