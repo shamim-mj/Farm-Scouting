@@ -36,8 +36,6 @@ st.markdown("""
         font-family: 'Segoe UI', sans-serif;
         background-color: #f4f6f0;
     }
-
-    /* ── HERO BANNER ── */
     .hero {
         background: linear-gradient(150deg, #1b4332 0%, #2d6a4f 45%, #52b788 100%);
         border-radius: 20px;
@@ -64,151 +62,73 @@ st.markdown("""
         background: rgba(255,255,255,0.04);
         border-radius: 50%;
     }
-    .hero-icon   { font-size: 3rem; margin-bottom: 4px; line-height: 1; }
-    .hero-title  {
-        font-size: 1.85rem;
-        font-weight: 800;
-        color: #ffffff;
-        margin: 0;
-        letter-spacing: 0.5px;
+    .hero-icon  { font-size: 3rem; margin-bottom: 4px; line-height: 1; }
+    .hero-title {
+        font-size: 1.85rem; font-weight: 800; color: #ffffff;
+        margin: 0; letter-spacing: 0.5px;
         text-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
     .hero-sub {
-        font-size: 1rem;
-        color: #b7e4c7;
-        margin: 6px 0 0 0;
-        font-weight: 500;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
+        font-size: 1rem; color: #b7e4c7; margin: 6px 0 0 0;
+        font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase;
     }
     .hero-divider {
-        width: 60px; height: 3px;
-        background: #74c69d;
-        border-radius: 4px;
-        margin: 12px auto 0 auto;
+        width: 60px; height: 3px; background: #74c69d;
+        border-radius: 4px; margin: 12px auto 0 auto;
     }
-
-    /* ── TAGLINE STRIP ── */
     .tagline {
-        background: #d8f3dc;
-        border-radius: 0 0 14px 14px;
-        text-align: center;
-        padding: 8px 16px;
-        font-size: 0.88rem;
-        color: #1b4332;
-        font-weight: 600;
-        margin-bottom: 20px;
-        letter-spacing: 0.3px;
+        background: #d8f3dc; border-radius: 0 0 14px 14px;
+        text-align: center; padding: 8px 16px;
+        font-size: 0.88rem; color: #1b4332; font-weight: 600;
+        margin-bottom: 20px; letter-spacing: 0.3px;
     }
-
-    /* ── PDF BANNER ── */
-    .pdf-banner {
-        background: linear-gradient(135deg, #fff8e1, #fffde7);
-        border: 2px solid #f9a825;
-        border-radius: 14px;
-        padding: 14px 18px;
-        margin-bottom: 18px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        box-shadow: 0 2px 8px rgba(249,168,37,0.15);
-    }
-    .pdf-icon { font-size: 2rem; }
-    .pdf-text { flex: 1; }
-    .pdf-text strong { color: #e65100; font-size: 1rem; }
-    .pdf-text p { margin: 2px 0 0 0; font-size: 0.85rem; color: #795548; }
-
-    /* ── SECTION CARDS ── */
     .section-card {
-        background: #ffffff;
-        border-left: 5px solid #52b788;
-        border-radius: 12px;
-        padding: 14px 18px;
-        margin: 16px 0 8px 0;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        background: #ffffff; border-left: 5px solid #52b788;
+        border-radius: 12px; padding: 14px 18px;
+        margin: 16px 0 8px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
-    .section-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #1b4332;
-        margin: 0;
-    }
-
-    /* ── STEP BADGE ── */
+    .section-title { font-size: 1.1rem; font-weight: 700; color: #1b4332; margin: 0; }
     .step-badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: #2d6a4f;
-        color: white;
-        border-radius: 50%;
-        width: 28px; height: 28px;
-        font-weight: bold;
-        margin-right: 8px;
-        font-size: 0.9rem;
-        flex-shrink: 0;
+        display: inline-flex; align-items: center; justify-content: center;
+        background: #2d6a4f; color: white; border-radius: 50%;
+        width: 28px; height: 28px; font-weight: bold;
+        margin-right: 8px; font-size: 0.9rem; flex-shrink: 0;
     }
-
-    /* ── BUTTONS ── */
     .stButton > button {
-        width: 100%;
-        height: 58px;
-        font-size: 1.15rem;
-        font-weight: 700;
+        width: 100%; height: 58px; font-size: 1.15rem; font-weight: 700;
         border-radius: 14px;
         background: linear-gradient(135deg, #1b4332, #2d6a4f);
-        color: white;
-        border: none;
+        color: white; border: none;
         box-shadow: 0 5px 15px rgba(27,67,50,0.35);
-        transition: all 0.2s;
-        letter-spacing: 0.3px;
+        transition: all 0.2s; letter-spacing: 0.3px;
     }
     .stButton > button:hover {
         background: linear-gradient(135deg, #081c15, #1b4332);
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(27,67,50,0.4);
     }
-
-    /* ── SUCCESS / ERROR ── */
     .success-box {
         background: linear-gradient(135deg, #d8f3dc, #b7e4c7);
-        border: 2px solid #52b788;
-        border-radius: 16px;
-        padding: 22px;
-        text-align: center;
-        font-size: 1.05rem;
-        color: #1b4332;
-        box-shadow: 0 4px 12px rgba(82,183,136,0.2);
+        border: 2px solid #52b788; border-radius: 16px;
+        padding: 22px; text-align: center; font-size: 1.05rem;
+        color: #1b4332; box-shadow: 0 4px 12px rgba(82,183,136,0.2);
     }
     .error-box {
-        background: #ffebee;
-        border: 2px solid #e53935;
-        border-radius: 12px;
-        padding: 14px;
-        font-size: 1rem;
-        color: #b71c1c;
+        background: #ffebee; border: 2px solid #e53935;
+        border-radius: 12px; padding: 14px;
+        font-size: 1rem; color: #b71c1c;
     }
-
-    /* ── INPUTS ── */
     .stSelectbox > div > div,
     .stTextArea > div > textarea,
     .stTextInput > div > input {
-        font-size: 1.05rem !important;
-        border-radius: 10px !important;
+        font-size: 1.05rem !important; border-radius: 10px !important;
     }
-
-    /* ── FOOTER ── */
     .footer {
-        text-align: center;
-        color: #95a5a6;
-        font-size: 0.8rem;
-        margin-top: 36px;
-        padding-bottom: 24px;
-        border-top: 1px solid #e8f5e9;
-        padding-top: 16px;
+        text-align: center; color: #95a5a6; font-size: 0.8rem;
+        margin-top: 36px; padding-bottom: 24px;
+        border-top: 1px solid #e8f5e9; padding-top: 16px;
     }
     .footer strong { color: #2d6a4f; }
-
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
 </style>
@@ -229,11 +149,11 @@ def get_secret(key, default=None):
 def setup_cloudinary():
     if not CLOUDINARY_AVAILABLE:
         return False
-    cn = get_secret("CLOUDINARY_CLOUD_NAME")
-    ak = get_secret("CLOUDINARY_API_KEY")
-    as_ = get_secret("CLOUDINARY_API_SECRET")
-    if cn and ak and as_:
-        cloudinary.config(cloud_name=cn, api_key=ak, api_secret=as_)
+    cn  = get_secret("CLOUDINARY_CLOUD_NAME")
+    ak  = get_secret("CLOUDINARY_API_KEY")
+    ase = get_secret("CLOUDINARY_API_SECRET")
+    if cn and ak and ase:
+        cloudinary.config(cloud_name=cn, api_key=ak, api_secret=ase)
         return True
     return False
 
@@ -243,7 +163,7 @@ def compress_to_jpeg(image_bytes):
         bg = Image.new("RGB", img.size, (255, 255, 255))
         if img.mode == "P":
             img = img.convert("RGBA")
-        bg.paste(img, mask=img.split()[-1] if img.mode in ("RGBA","LA") else None)
+        bg.paste(img, mask=img.split()[-1] if img.mode in ("RGBA", "LA") else None)
         img = bg
     elif img.mode != "RGB":
         img = img.convert("RGB")
@@ -255,7 +175,7 @@ def compress_to_jpeg(image_bytes):
 def upload_to_cloudinary(raw, filename):
     try:
         jpeg = compress_to_jpeg(raw)
-        res = cloudinary.uploader.upload(
+        res  = cloudinary.uploader.upload(
             jpeg, folder="robbie_williams_farms",
             public_id=filename, resource_type="image"
         )
@@ -291,9 +211,9 @@ def get_gsheet():
         except Exception:
             ws = sh.add_worksheet(title="Issues", rows=1000, cols=20)
             ws.append_row([
-                "Timestamp","Farm","Location/Side","Issue Type",
-                "Description","Reporter","Latitude","Longitude",
-                "Photo URL","Severity"
+                "Timestamp", "Farm", "Location/Side", "Issue Type",
+                "Description", "Reporter", "Latitude", "Longitude",
+                "Photo URL", "Severity"
             ])
         return sh, ws
     except Exception:
@@ -322,11 +242,20 @@ def send_email(issue_data, photo_src):
         msg["From"]    = sender
         msg["To"]      = receiver
 
-        sev_color = {"🔴 High – Urgent":"#c62828","🟡 Medium – Monitor":"#f9a825","🟢 Low – Note it":"#2e7d32"}.get(issue_data["severity"],"#555")
-        photo_html = f'<img src="{photo_src}" style="max-width:420px;border-radius:10px;margin-top:10px;"/>' if photo_src else "<em>No photo.</em>"
+        sev_color = {
+            "🔴 High – Urgent":    "#c62828",
+            "🟡 Medium – Monitor": "#f9a825",
+            "🟢 Low – Note it":    "#2e7d32",
+        }.get(issue_data["severity"], "#555")
+
+        photo_html = (
+            f'<img src="{photo_src}" style="max-width:420px;border-radius:10px;margin-top:10px;"/>'
+            if photo_src else "<em>No photo submitted.</em>"
+        )
         maps = ""
-        if issue_data.get("lat") not in ("N/A",""):
-            maps = f'<br><a href="https://maps.google.com/?q={issue_data["lat"]},{issue_data["lon"]}" style="color:#1976d2;">📍 View on Google Maps</a>'
+        if issue_data.get("lat") not in ("N/A", ""):
+            maps = (f'<br><a href="https://maps.google.com/?q={issue_data["lat"]},{issue_data["lon"]}" '
+                    f'style="color:#1976d2;">📍 View on Google Maps</a>')
 
         html = f"""
         <html><body style="font-family:Segoe UI,sans-serif;background:#f0f4f0;padding:20px;">
@@ -337,8 +266,7 @@ def send_email(issue_data, photo_src):
             <div style="font-size:2rem;">🌾</div>
             <h2 style="margin:4px 0 0 0;font-size:1.4rem;">Robbie Williams Farms</h2>
             <p style="margin:4px 0 0 0;opacity:0.85;font-size:0.95rem;letter-spacing:1px;">
-              FIELD SCOUT REPORT
-            </p>
+              FIELD SCOUT REPORT</p>
           </div>
           <div style="padding:22px;">
             <table style="width:100%;border-collapse:collapse;font-size:0.97rem;">
@@ -349,10 +277,12 @@ def send_email(issue_data, photo_src):
               <tr style="background:#f9fbe7;">
                   <td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
                   📍 Location</td>
-                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">{issue_data['location']}</td></tr>
+                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
+                  {issue_data['location']}</td></tr>
               <tr><td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
                   ⚠️ Issue</td>
-                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">{issue_data['issue_type']}</td></tr>
+                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
+                  {issue_data['issue_type']}</td></tr>
               <tr style="background:#f9fbe7;">
                   <td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
                   🔥 Severity</td>
@@ -360,12 +290,14 @@ def send_email(issue_data, photo_src):
                              font-weight:700;color:{sev_color};">{issue_data['severity']}</td></tr>
               <tr><td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
                   👤 Reporter</td>
-                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">{issue_data['reporter']}</td></tr>
+                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
+                  {issue_data['reporter']}</td></tr>
               <tr style="background:#f9fbe7;">
                   <td style="padding:9px 10px;font-weight:700;color:#555;">🕒 Time</td>
                   <td style="padding:9px 10px;">{issue_data['timestamp']}</td></tr>
               <tr><td style="padding:9px 10px;font-weight:700;color:#555;">🗺️ GPS</td>
-                  <td style="padding:9px 10px;">{issue_data.get('lat','N/A')}, {issue_data.get('lon','N/A')}{maps}</td></tr>
+                  <td style="padding:9px 10px;">
+                  {issue_data.get('lat','N/A')}, {issue_data.get('lon','N/A')}{maps}</td></tr>
             </table>
             <div style="background:#fff8e1;border-left:4px solid #fb8c00;
                         border-radius:8px;padding:14px;margin-top:16px;">
@@ -392,57 +324,101 @@ def send_email(issue_data, photo_src):
         return False, str(e)
 
 # ─────────────────────────────────────────────
-#  FARM LIST
+#  SMS NOTIFICATION (email-to-SMS gateway)
 # ─────────────────────────────────────────────
-def get_farm_list():
+#
+#  Carrier email-to-SMS gateways (add yours to secrets):
+#  AT&T:        {number}@txt.att.net
+#  Verizon:     {number}@vtext.com
+#  T-Mobile:    {number}@tmomail.net
+#  Sprint:      {number}@messaging.sprintpcs.com
+#  US Cellular: {number}@email.uscc.net
+#  Cricket:     {number}@sms.cricketwireless.net
+#  Boost:       {number}@sms.myboostmobile.com
+#
+def send_sms(issue_data):
+    """Send a short text message via email-to-SMS gateway."""
     try:
-        raw = get_secret("FARM_LIST")
-        if raw:
-            return ["🌱 Select a farm…"] + [f.strip() for f in raw.split(",") if f.strip()]
-    except Exception:
-        pass
-    return [
-        "🌱 Select a farm…",
-        "Abbott (Bruce) – 27 Crop Acres",
-        "Allen (Jennings) – 390 Crop Acres",
-        "Allen (Matthew) – 181 Crop Acres",
-        "Allgood (Lower) – 209 Crop Acres",
-        "Allgood (Upper) – 45 Crop Acres",
-        "Alves – 204 Crop Acres",
-        "Ashworth – 14 Crop Acres",
-        "Bennett – 15 Crop Acres",
-        "Book McLevian – 187 Crop Acres",
-        "Bugg (Wayne) – 68 Crop Acres",
-        "Community College – 65 Crop Acres",
-        "Dawson & Parker – 100 Crop Acres",
-        "Dawson (Coraville) – 50 Crop Acres",
-        "Dempewolf (Griffin) – 126 Crop Acres",
-        "Dempewolf (Goben) – 90 Crop Acres",
-        "Dempewolf (Ben Moss) – 116 Crop Acres",
-        "Dempewolf (Cool Springs) – 229 Crop Acres",
-        "Dempewolf (Farley) – 183 Crop Acres",
-        "Dempewolf (Kimsey Ln) – 67 Crop Acres",
-        "Dempewolf (Pearson) – 134 Crop Acres",
-        "Dempewolf (Triplet) – 170 Crop Acres",
-        "Dempewolf (by Wellmeier) – 25 Crop Acres",
-        "Haynes (Terry) – 32 Crop Acres",
-        "Haynes (Troy) – 151 Crop Acres",
-        "Ijames (Lower) – 71 Crop Acres",
-        "Ijames (Upper) – 65 Crop Acres",
-        "Jones (Pete) – Crop Acres",
-        "Keach Airline Road – 526 Crop Acres",
-        "Keach Home – 585 Crop Acres",
-        "McCollom – 113 Crop Acres",
-        "McConathy – 218 Crop Acres",
-        "McConathy (Rucker Rd) – 67 Crop Acres",
-        "Reed North – 508 Crop Acres",
-        "Reed South – 136 Crop Acres",
-        "Sawyer (Silas) – 12 Crop Acres",
-        "Staples – 200 Crop Acres",
-        "VIP – 122 Crop Acres",
-        "Williams (Dan) – 79 Crop Acres",
-        "Williams Thrasher Busby – 274 Crop Acres",
-    ]
+        sender      = get_secret("EMAIL_SENDER")
+        password    = get_secret("EMAIL_PASSWORD")
+        sms_address = get_secret("8595391251@tmomail.net")   # e.g. 2705551234@vtext.com
+        if not all([sender, password, sms_address]):
+            return False, "SMS_ADDRESS secret missing"
+
+        sev_icon = {
+            "🔴 High – Urgent":    "🔴 URGENT",
+            "🟡 Medium – Monitor": "🟡 Monitor",
+            "🟢 Low – Note it":    "🟢 Low",
+        }.get(issue_data["severity"], issue_data["severity"])
+
+        # Keep SMS very short — carriers truncate long messages
+        body = (
+            f"🌾 Farm Scout Alert\n"
+            f"{sev_icon}\n"
+            f"Farm: {issue_data['farm'][:40]}\n"
+            f"Spot: {issue_data['location']}\n"
+            f"Issue: {issue_data['issue_type']}\n"
+            f"By: {issue_data['reporter']}\n"
+            f"{issue_data['description'][:80]}"
+        )
+
+        msg = MIMEText(body)
+        msg["From"]    = sender
+        msg["To"]      = sms_address
+        msg["Subject"] = ""   # Subject shows as part of text on most carriers
+
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(sender, password)
+            server.sendmail(sender, sms_address, msg.as_string())
+        return True, "OK"
+    except Exception as e:
+        return False, str(e)
+
+# ─────────────────────────────────────────────
+#  FARM / ISSUE / SIDE LISTS
+# ─────────────────────────────────────────────
+FARMS = [
+    "🌱 Select a farm…",
+    "Abbott (Bruce) – 27 Crop Acres",
+    "Allen (Jennings) – 390 Crop Acres",
+    "Allen (Matthew) – 181 Crop Acres",
+    "Allgood (Lower) – 209 Crop Acres",
+    "Allgood (Upper) – 45 Crop Acres",
+    "Alves – 204 Crop Acres",
+    "Ashworth – 14 Crop Acres",
+    "Bennett – 15 Crop Acres",
+    "Book McLevian – 187 Crop Acres",
+    "Bugg (Wayne) – 68 Crop Acres",
+    "Community College – 65 Crop Acres",
+    "Dawson & Parker – 100 Crop Acres",
+    "Dawson (Coraville) – 50 Crop Acres",
+    "Dempewolf (Griffin) – 126 Crop Acres",
+    "Dempewolf (Goben) – 90 Crop Acres",
+    "Dempewolf (Ben Moss) – 116 Crop Acres",
+    "Dempewolf (Cool Springs) – 229 Crop Acres",
+    "Dempewolf (Farley) – 183 Crop Acres",
+    "Dempewolf (Kimsey Ln) – 67 Crop Acres",
+    "Dempewolf (Pearson) – 134 Crop Acres",
+    "Dempewolf (Triplet) – 170 Crop Acres",
+    "Dempewolf (by Wellmeier) – 25 Crop Acres",
+    "Haynes (Terry) – 32 Crop Acres",
+    "Haynes (Troy) – 151 Crop Acres",
+    "Ijames (Lower) – 71 Crop Acres",
+    "Ijames (Upper) – 65 Crop Acres",
+    "Jones (Pete) – Crop Acres",
+    "Keach Airline Road – 526 Crop Acres",
+    "Keach Home – 585 Crop Acres",
+    "McCollom – 113 Crop Acres",
+    "McConathy – 218 Crop Acres",
+    "McConathy (Rucker Rd) – 67 Crop Acres",
+    "Reed North – 508 Crop Acres",
+    "Reed South – 136 Crop Acres",
+    "Sawyer (Silas) – 12 Crop Acres",
+    "Staples – 200 Crop Acres",
+    "VIP – 122 Crop Acres",
+    "Williams (Dan) – 79 Crop Acres",
+    "Williams Thrasher Busby – 274 Crop Acres",
+]
 
 ISSUE_TYPES = [
     "🌿 Select issue type…",
@@ -503,7 +479,8 @@ GPS_COMPONENT = """
   </button>
   <div id="coords" style="margin-top:10px;font-size:0.95rem;color:#333;"></div>
   <div id="gps_help" style="display:none;background:#fff8e1;border:1px solid #f9a825;
-       border-radius:10px;padding:12px;margin-top:10px;font-size:0.88rem;color:#555;line-height:1.7;">
+       border-radius:10px;padding:12px;margin-top:10px;font-size:0.88rem;
+       color:#555;line-height:1.7;">
     <strong>📋 How to allow location:</strong><br>
     <b>iPhone:</b> Settings → Safari → Location → Allow<br>
     <b>Android:</b> Tap 🔒 in address bar → Site Settings → Location → Allow<br><br>
@@ -543,67 +520,48 @@ function getLocation() {
       btn.disabled = false;
     },
     function(err) {
-      var msgs = {1:'🚫 Location blocked. See help below, then tap again.',
-                  2:'📶 Location unavailable. Try moving outside.',
-                  3:'⏱️ Timed out. Try again or enter manually below.'};
-      info.innerHTML = '<span style="color:#c62828;">' + (msgs[err.code]||'❌ '+err.message) + '</span>';
+      var msgs = {
+        1: '🚫 Location blocked. See help below, then tap again.',
+        2: '📶 Location unavailable. Try moving outside.',
+        3: '⏱️ Timed out. Try again or enter manually below.'
+      };
+      info.innerHTML = '<span style="color:#c62828;">' +
+        (msgs[err.code] || '❌ ' + err.message) + '</span>';
       help.style.display = 'block';
       btn.textContent = '📡 Tap to Retry GPS';
       btn.disabled = false;
     },
-    {enableHighAccuracy:true, timeout:12000, maximumAge:0}
+    {enableHighAccuracy: true, timeout: 12000, maximumAge: 0}
   );
 }
 </script>
 """
 
 # ─────────────────────────────────────────────
-#  PDF VIEWER HELPER
+#  PDF SECTION  — always from secret URL
 # ─────────────────────────────────────────────
 def show_pdf_section():
-    """Show a collapsible section with the farm field map PDF."""
     pdf_url = get_secret("FARM_PDF_URL", "")
 
     st.markdown("""
     <div class="section-card">
       <div class="section-title">
-        <span class="step-badge">📄</span>Farm Field Reference Map
+        📄 &nbsp;Farm Field Reference Map
       </div>
     </div>
     """, unsafe_allow_html=True)
 
-    with st.expander("📄 View Farm Fields & Acreage Guide", expanded=False):
+    with st.expander("📄 Tap to View Farm Fields & Acreage Guide", expanded=False):
         if pdf_url:
-            # Embed PDF from URL (works great with Google Drive or any direct link)
             st.markdown(
-                f'<iframe src="{pdf_url}" width="100%" height="520px" '
-                f'style="border:none;border-radius:10px;"></iframe>',
+                f'<iframe src="{pdf_url}" width="100%" height="560px" '
+                f'style="border:none;border-radius:12px;'
+                f'box-shadow:0 2px 10px rgba(0,0,0,0.1);"></iframe>',
                 unsafe_allow_html=True,
             )
-            st.caption("👆 Scroll inside the PDF to view all farm fields and acreage.")
+            st.caption("👆 Scroll inside the document to view all farm fields and acreage.")
         else:
-            # Allow uploading a local PDF for viewing
-            pdf_file = st.file_uploader(
-                "Upload your Farm Field PDF here",
-                type=["pdf"],
-                key="pdf_uploader",
-                help="Upload the farm fields and acreage reference PDF"
-            )
-            if pdf_file:
-                b64 = base64.b64encode(pdf_file.read()).decode("utf-8")
-                st.markdown(
-                    f'<iframe src="data:application/pdf;base64,{b64}" '
-                    f'width="100%" height="520px" '
-                    f'style="border:none;border-radius:10px;"></iframe>',
-                    unsafe_allow_html=True,
-                )
-                st.caption("👆 Scroll inside the PDF to view all farm fields and acreage.")
-            else:
-                st.info(
-                    "📋 No PDF linked yet.\n\n"
-                    "**Option 1:** Upload the PDF above.\n\n"
-                    "**Option 2:** Add `FARM_PDF_URL` to Streamlit secrets with a Google Drive or direct PDF link."
-                )
+            st.warning("⚠️ Farm PDF not configured. Add `FARM_PDF_URL` to Streamlit secrets.")
 
 # ─────────────────────────────────────────────
 #  MAIN APP
@@ -623,11 +581,11 @@ def main():
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Setup services ───────────────────────
+    # ── Setup services ────────────────────────
     cloudinary_ok = setup_cloudinary()
     _, gsheet_ws  = get_gsheet()
 
-    # ══ PDF REFERENCE ════════════════════════
+    # ══ PDF REFERENCE ═════════════════════════
     show_pdf_section()
 
     # ── Read GPS from URL params ──────────────
@@ -642,14 +600,13 @@ def main():
     </div>
     """, unsafe_allow_html=True)
 
-    farm_selected = st.selectbox("🏡 Choose Farm", get_farm_list(), index=0)
+    farm_selected = st.selectbox("🏡 Choose Farm", FARMS, index=0)
     side_selected = st.selectbox("📍 Which Part of the Farm?", FARM_SIDES, index=0)
 
-    # ── GPS ───────────────────────────────────
     st.markdown("**📡 GPS Coordinates** — tap the button below on your phone")
     st.components.v1.html(GPS_COMPONENT, height=210)
-
     st.caption("🔒 GPS blocked? Enter coordinates manually (open Google Maps → long-press your spot → copy numbers).")
+
     lat_col, lon_col = st.columns(2)
     with lat_col:
         lat_input = st.text_input("Latitude",  value=gps_lat, placeholder="e.g. 37.989450")
@@ -687,7 +644,7 @@ def main():
 
     photo_file = st.file_uploader(
         "Tap to take a photo or choose from gallery",
-        type=["jpg","jpeg","png","heic","webp"],
+        type=["jpg", "jpeg", "png", "heic", "webp"],
         accept_multiple_files=False,
         help="Use your phone camera for best results",
     )
@@ -711,7 +668,7 @@ def main():
 
     if st.button("🚀 Submit Scout Report", use_container_width=True):
 
-        # ── Validation ────────────────────────
+        # Validation
         errors = []
         if farm_selected.startswith("🌱"):  errors.append("Please select a farm.")
         if side_selected.startswith("📍"):  errors.append("Please select the farm location/side.")
@@ -732,12 +689,12 @@ def main():
         photo_url = ""
         photo_b64 = ""
 
-        # ── Upload photo ──────────────────────
+        # Upload photo
         progress.progress(20, text="Uploading photo…")
         if photo_file:
             photo_file.seek(0)
-            raw = photo_file.read()
-            safe = farm_selected[:30].replace(" ","_").replace("/","-")
+            raw   = photo_file.read()
+            safe  = farm_selected[:30].replace(" ", "_").replace("/", "-")
             fname = f"{safe}_{timestamp.replace(' ','_').replace(':','-')}"
             if cloudinary_ok:
                 photo_url = upload_to_cloudinary(raw, fname)
@@ -755,7 +712,7 @@ def main():
             "timestamp": timestamp, "photo_url": photo_url,
         }
 
-        # ── Google Sheets ─────────────────────
+        # Google Sheets
         progress.progress(50, text="Saving record…")
         sheet_ok = False
         if gsheet_ws:
@@ -765,14 +722,19 @@ def main():
                 lat_input or "N/A", lon_input or "N/A", photo_url, severity,
             ])
 
-        # ── Email ─────────────────────────────
-        progress.progress(75, text="Sending notification…")
-        email_src = photo_url if (photo_url and not photo_url.startswith("ERROR") and photo_url != "embedded-in-email") else photo_b64
+        # Email + SMS
+        progress.progress(75, text="Sending notifications…")
+        email_src = (
+            photo_url if (photo_url and not photo_url.startswith("ERROR")
+                          and photo_url != "embedded-in-email")
+            else photo_b64
+        )
         email_ok, email_msg = send_email(issue_data, email_src)
+        sms_ok,   sms_msg   = send_sms(issue_data)
 
         progress.progress(100, text="Done!")
 
-        # ── Status lines ──────────────────────
+        # Status
         lines = []
         if not photo_file:
             lines.append("📷 No photo submitted")
@@ -784,7 +746,8 @@ def main():
             lines.append("⚠️ Photo could not be processed")
 
         lines.append("✅ Record saved to Google Sheets" if sheet_ok else "⚠️ Sheet not saved – check config")
-        lines.append("✅ Email notification sent" if email_ok else f"⚠️ Email not sent ({email_msg})")
+        lines.append("✅ Email notification sent"        if email_ok else f"⚠️ Email not sent ({email_msg})")
+        lines.append("✅ Text message sent"              if sms_ok   else f"⚠️ SMS not sent ({sms_msg})")
 
         st.markdown(f"""
         <div class="success-box">
@@ -804,10 +767,11 @@ def main():
     # ── Footer ────────────────────────────────
     st.markdown("""
     <div class="footer">
-      🌾 <strong>Robbie Williams Farms</strong> &nbsp;|&nbsp; Field Scout App
-      &nbsp;|&nbsp; Henderson, KY
+      🌾 <strong>Robbie Williams Farms</strong> &nbsp;|&nbsp;
+      Field Scout App &nbsp;|&nbsp; Henderson, KY
     </div>
     """, unsafe_allow_html=True)
+
 
 if __name__ == "__main__":
     main()
