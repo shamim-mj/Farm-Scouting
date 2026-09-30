@@ -213,8 +213,8 @@ def get_gsheet():
                 "client_id":                   creds_raw["client_id"],
                 "auth_uri":                    creds_raw["auth_uri"],
                 "token_uri":                   creds_raw["token_uri"],
-                "auth_provider_x509_cert_url": creds_raw.get("auth_provider_x509_cert_url", ""),
-                "client_x509_cert_url":        creds_raw.get("client_x509_cert_url", ""),
+                "auth_provider_x509_cert_url": creds_raw.get("auth_provider_x509_cert_url"),
+                "client_x509_cert_url":        creds_raw.get("client_x509_cert_url"),
             }
         scopes = [
             "https://www.googleapis.com/auth/spreadsheets",
