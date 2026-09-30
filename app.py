@@ -28,7 +28,7 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-#  CSS
+#  CSS  — paste this entire block replacing your current one
 # ─────────────────────────────────────────────
 st.markdown("""
 <style>
@@ -36,55 +36,115 @@ st.markdown("""
         font-family: 'Segoe UI', sans-serif;
         background-color: #f4f6f0;
     }
+
+    /* ── COMPACT MOBILE HEADER ── */
     .hero {
-        background: linear-gradient(150deg, #1b4332 0%, #2d6a4f 45%, #52b788 100%);
-        border-radius: 20px; padding: 30px 24px 22px 24px;
-        text-align: center; margin-bottom: 6px;
-        box-shadow: 0 6px 24px rgba(0,0,0,0.22);
-        position: relative; overflow: hidden;
+        background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 60%, #52b788 100%);
+        border-radius: 14px;
+        padding: 12px 18px 10px 18px;
+        margin-bottom: 4px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
-    .hero::before { content:""; position:absolute; top:-40px; right:-40px;
-        width:160px; height:160px; background:rgba(255,255,255,0.06); border-radius:50%; }
-    .hero::after  { content:""; position:absolute; bottom:-50px; left:-30px;
-        width:200px; height:200px; background:rgba(255,255,255,0.04); border-radius:50%; }
-    .hero-icon  { font-size:3rem; margin-bottom:4px; line-height:1; }
-    .hero-title { font-size:1.85rem; font-weight:800; color:#ffffff; margin:0;
-        letter-spacing:0.5px; text-shadow:0 2px 8px rgba(0,0,0,0.3); }
-    .hero-sub   { font-size:1rem; color:#b7e4c7; margin:6px 0 0 0;
-        font-weight:500; letter-spacing:1.5px; text-transform:uppercase; }
-    .hero-divider { width:60px; height:3px; background:#74c69d;
-        border-radius:4px; margin:12px auto 0 auto; }
-    .tagline { background:#d8f3dc; border-radius:0 0 14px 14px;
-        text-align:center; padding:8px 16px; font-size:0.88rem;
-        color:#1b4332; font-weight:600; margin-bottom:20px; }
-    .section-card { background:#ffffff; border-left:5px solid #52b788;
-        border-radius:12px; padding:14px 18px;
-        margin:16px 0 8px 0; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+    .hero-left {
+        font-size: 1.8rem;
+        line-height: 1;
+        flex-shrink: 0;
+    }
+    .hero-right {
+        text-align: left;
+    }
+    .hero-title {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin: 0;
+        line-height: 1.2;
+        text-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    }
+    .hero-sub {
+        font-size: 0.72rem;
+        color: #b7e4c7;
+        margin: 2px 0 0 0;
+        font-weight: 500;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+    }
+    .tagline {
+        background: #d8f3dc;
+        border-radius: 0 0 10px 10px;
+        text-align: center;
+        padding: 5px 14px;
+        font-size: 0.82rem;
+        color: #1b4332;
+        font-weight: 600;
+        margin-bottom: 16px;
+    }
+
+    /* ── SECTION CARDS ── */
+    .section-card {
+        background: #ffffff;
+        border-left: 5px solid #52b788;
+        border-radius: 12px;
+        padding: 14px 18px;
+        margin: 16px 0 8px 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
     .section-title { font-size:1.1rem; font-weight:700; color:#1b4332; margin:0; }
-    .step-badge { display:inline-flex; align-items:center; justify-content:center;
-        background:#2d6a4f; color:white; border-radius:50%;
-        width:28px; height:28px; font-weight:bold;
-        margin-right:8px; font-size:0.9rem; flex-shrink:0; }
-    .stButton > button { width:100%; height:58px; font-size:1.15rem; font-weight:700;
-        border-radius:14px; background:linear-gradient(135deg,#1b4332,#2d6a4f);
-        color:white; border:none; box-shadow:0 5px 15px rgba(27,67,50,0.35);
-        transition:all 0.2s; letter-spacing:0.3px; }
-    .stButton > button:hover { background:linear-gradient(135deg,#081c15,#1b4332);
-        transform:translateY(-2px); box-shadow:0 8px 20px rgba(27,67,50,0.4); }
-    .success-box { background:linear-gradient(135deg,#d8f3dc,#b7e4c7);
-        border:2px solid #52b788; border-radius:16px; padding:22px;
-        text-align:center; font-size:1.05rem; color:#1b4332;
-        box-shadow:0 4px 12px rgba(82,183,136,0.2); }
-    .error-box { background:#ffebee; border:2px solid #e53935;
-        border-radius:12px; padding:14px; font-size:1rem; color:#b71c1c; }
+    .step-badge {
+        display: inline-flex; align-items: center; justify-content: center;
+        background: #2d6a4f; color: white; border-radius: 50%;
+        width: 28px; height: 28px; font-weight: bold;
+        margin-right: 8px; font-size: 0.9rem; flex-shrink: 0;
+    }
+
+    /* ── BUTTONS ── */
+    .stButton > button {
+        width: 100%; height: 58px; font-size: 1.15rem; font-weight: 700;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #1b4332, #2d6a4f);
+        color: white; border: none;
+        box-shadow: 0 5px 15px rgba(27,67,50,0.35);
+        transition: all 0.2s; letter-spacing: 0.3px;
+    }
+    .stButton > button:hover {
+        background: linear-gradient(135deg, #081c15, #1b4332);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(27,67,50,0.4);
+    }
+
+    /* ── SUCCESS / ERROR ── */
+    .success-box {
+        background: linear-gradient(135deg, #d8f3dc, #b7e4c7);
+        border: 2px solid #52b788; border-radius: 16px; padding: 22px;
+        text-align: center; font-size: 1.05rem; color: #1b4332;
+        box-shadow: 0 4px 12px rgba(82,183,136,0.2);
+    }
+    .error-box {
+        background: #ffebee; border: 2px solid #e53935;
+        border-radius: 12px; padding: 14px;
+        font-size: 1rem; color: #b71c1c;
+    }
+
+    /* ── INPUTS ── */
     .stSelectbox > div > div,
     .stTextArea > div > textarea,
-    .stTextInput > div > input { font-size:1.05rem !important; border-radius:10px !important; }
-    .footer { text-align:center; color:#95a5a6; font-size:0.8rem;
-        margin-top:36px; padding-bottom:24px;
-        border-top:1px solid #e8f5e9; padding-top:16px; }
-    .footer strong { color:#2d6a4f; }
-    #MainMenu {visibility:hidden;} footer {visibility:hidden;}
+    .stTextInput > div > input {
+        font-size: 1.05rem !important; border-radius: 10px !important;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+        text-align: center; color: #95a5a6; font-size: 0.8rem;
+        margin-top: 36px; padding-bottom: 24px;
+        border-top: 1px solid #e8f5e9; padding-top: 16px;
+    }
+    .footer strong { color: #2d6a4f; }
+
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -564,16 +624,18 @@ def show_pdf_section():
 # ─────────────────────────────────────────────
 def main():
 
+# ─────────────────────────────────────────────
+#  HERO BANNER  — replace your current hero st.markdown() in main()
+# ─────────────────────────────────────────────
     st.markdown("""
     <div class="hero">
-      <div class="hero-icon">🌾</div>
-      <h1 class="hero-title">Robbie Williams Farms</h1>
-      <p class="hero-sub">Field Scout Report</p>
-      <div class="hero-divider"></div>
+    <div class="hero-left">🌾</div>
+    <div class="hero-right">
+        <div class="hero-title">Robbie Williams Farms</div>
+        <div class="hero-sub">Field Scout Report &nbsp;·&nbsp; Henderson, KY</div>
     </div>
-    <div class="tagline">
-      📋 Report a field issue quickly — photo, location &amp; GPS included
     </div>
+    <div class="tagline">📋 Report a field issue — photo, GPS &amp; location</div>
     """, unsafe_allow_html=True)
 
     cloudinary_ok = setup_cloudinary()
