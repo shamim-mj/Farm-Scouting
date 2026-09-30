@@ -341,7 +341,7 @@ def send_sms(issue_data):
     try:
         sender      = get_secret("EMAIL_SENDER")
         password    = get_secret("EMAIL_PASSWORD")
-        sms_address = get_secret("8595391251@tmomail.net")   # e.g. 2705551234@vtext.com
+        sms_address = get_secret("SMS_ADDRESS ")   # e.g. 2705551234@vtext.com
         if not all([sender, password, sms_address]):
             return False, "SMS_ADDRESS secret missing"
 
