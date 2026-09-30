@@ -604,7 +604,7 @@ def main():
     side_selected = st.selectbox("📍 Which Part of the Farm?", FARM_SIDES, index=0)
 
     st.markdown("**📡 GPS Coordinates** — tap the button below on your phone")
-    st.components.v1.html(GPS_COMPONENT, height=210)
+    st.components.v1.html(GPS_COMPONENT, height=100)
     st.caption("🔒 GPS blocked? Enter coordinates manually (open Google Maps → long-press your spot → copy numbers).")
 
     lat_col, lon_col = st.columns(2)
