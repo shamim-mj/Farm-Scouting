@@ -494,13 +494,15 @@ function getLocation() {
       btn.disabled = false;
       btn.style.background = 'linear-gradient(135deg,#1b5e20,#2e7d32)';
 
-      // ✅ Also try to update parent URL params (works in some browsers)
+      // ✅ Try full parent page reload with GPS in URL — triggers Streamlit rerun
       try {
         var url = new URL(window.parent.location.href);
         url.searchParams.set('lat', capturedLat);
         url.searchParams.set('lon', capturedLon);
-        window.parent.history.replaceState({}, '', url.toString());
-      } catch(e) {}
+        window.parent.location.href = url.toString();  // full reload
+      } catch(e) {
+        // If sandbox blocks parent access, user uses copy button instead
+      }
     },
     function(err) {
       var msgs = {
@@ -606,13 +608,11 @@ def main():
     st.markdown("**📡 GPS Coordinates** — tap the button below")
     st.components.v1.html(GPS_HTML, height=220)
 
-    # ✅ After GPS is captured, show a Streamlit button to lock in the coordinates
+    # ✅ Show confirmation if GPS already captured, otherwise just a caption
     if gps_lat and gps_lon:
-        st.success(f"📍 GPS ready: **{gps_lat}**, **{gps_lon}** — coordinates filled below ✅")
+        st.success(f"📍 GPS captured: **{gps_lat}**, **{gps_lon}** — filled below ✅")
     else:
-        if st.button("🔄 I got my coordinates — load them now", use_container_width=False):
-            st.rerun()
-        st.caption("👆 After GPS captures your location, tap the button above to fill in coordinates automatically. Or paste manually below.")
+        st.caption("👆 Tap the GPS button → green box appears → tap **📋 Copy Coordinates** → paste into boxes below. Or just type manually.")
 
     lat_col, lon_col = st.columns(2)
     with lat_col:
