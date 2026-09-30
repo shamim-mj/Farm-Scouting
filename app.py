@@ -235,7 +235,7 @@ def build_email_html(issue_data, photo_src):
                 overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12);">
       <div style="background:linear-gradient(135deg,#1b4332,#52b788);
                   padding:22px;text-align:center;color:white;">
-        <div style="font-size:2rem;">🌾</div>
+        <!-- <div style="font-size:2rem;">🌾</div> -->
         <h2 style="margin:4px 0 0 0;font-size:1.4rem;">Robbie Williams Farms</h2>
         <p style="margin:4px 0 0 0;opacity:0.85;font-size:0.95rem;letter-spacing:1px;">
           FIELD SCOUT REPORT</p>
@@ -446,7 +446,6 @@ GPS_HTML = """
   <div>✅ <strong>Location Captured!</strong></div>
   <div class="coords" id="coord_display"></div>
   <button id="copy_btn" onclick="copyCoords()">📋 Copy Coordinates</button>
-  <div class="hint">👇 Then paste into the Latitude &amp; Longitude boxes below</div>
 </div>
 
 <div id="error_box">
@@ -604,7 +603,7 @@ def main():
 
     # ── GPS button ────────────────────────────
     st.markdown("**📡 GPS Coordinates** — tap the button, then paste coordinates below")
-    st.components.v1.html(GPS_HTML, height=220)
+    st.iframe(GPS_HTML, height=220)
 
     st.caption("👆 After tapping the button, tap **📋 Copy Coordinates** then paste into both boxes below.")
 
