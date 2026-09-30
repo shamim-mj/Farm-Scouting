@@ -238,7 +238,7 @@ def build_email_html(issue_data, photo_src):
     <div style="background: linear-gradient(145deg, #133024, #1b4332); padding: 32px 24px; text-align: center; color: #ffffff; position: relative;">
       <!-- Subtle Decorative Accent Grid/Dot pattern alternative or clean graphic emoji anchor -->
       <div style="font-size: 2.5rem; margin-bottom: 12px; line-height: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));">🌾</div>
-      <h2 style="margin: 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2;">Robbie Williams Farms</h2>
+      <h2 style="margin: 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2;">Robbie Williams FARMS</h2>
       <p style="margin: 8px 0 0 0; color: #52b788; font-weight: 700; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase;">Field Scout Report</p>
     </div>
 
