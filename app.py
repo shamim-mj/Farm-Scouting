@@ -603,16 +603,22 @@ def main():
     side_selected = st.selectbox("📍 Which Part of the Farm?", FARM_SIDES, index=0)
 
     # ── GPS button ────────────────────────────
-    st.markdown("**📡 GPS Coordinates** — tap the button, then paste coordinates below")
+    st.markdown("**📡 GPS Coordinates** — tap the button below")
     st.components.v1.html(GPS_HTML, height=220)
 
-    st.caption("👆 After tapping the button, tap **📋 Copy Coordinates** then paste into both boxes below.")
+    # ✅ After GPS is captured, show a Streamlit button to lock in the coordinates
+    if gps_lat and gps_lon:
+        st.success(f"📍 GPS ready: **{gps_lat}**, **{gps_lon}** — coordinates filled below ✅")
+    else:
+        if st.button("🔄 I got my coordinates — load them now", use_container_width=False):
+            st.rerun()
+        st.caption("👆 After GPS captures your location, tap the button above to fill in coordinates automatically. Or paste manually below.")
 
     lat_col, lon_col = st.columns(2)
     with lat_col:
-        lat_input = st.text_input("Latitude",  value=gps_lat, placeholder="Paste here e.g. 37.989450")
+        lat_input = st.text_input("Latitude",  value=gps_lat, placeholder="e.g. 37.989450")
     with lon_col:
-        lon_input = st.text_input("Longitude", value=gps_lon, placeholder="Paste here e.g. -87.590321")
+        lon_input = st.text_input("Longitude", value=gps_lon, placeholder="e.g. -87.590321")
 
     # STEP 2
     st.markdown("""
