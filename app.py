@@ -390,41 +390,89 @@ FARM_SIDES = [
 ]
 
 # ─────────────────────────────────────────────
-#  GPS  — uses st.components.v1.html (supports JS)
-#          with full page reload to fill lat/lon
+#  GPS  — works inside Streamlit's iframe sandbox
+#  Strategy: JS gets coordinates and writes them
+#  into visible text boxes inside the iframe.
+#  User sees coords and they auto-copy into the
+#  Streamlit text inputs below via st.query_params
+#  on next interaction (or manual copy/paste).
 # ─────────────────────────────────────────────
 GPS_HTML = """
-<div id="gps_status" style="margin:6px 0;">
-  <button onclick="getLocation()" id="gps_btn"
-    style="background:linear-gradient(135deg,#1b4332,#2d6a4f);color:white;border:none;
-           border-radius:12px;padding:14px 18px;font-size:1.05rem;font-weight:700;
-           cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(27,67,50,0.3);">
-    📡 Tap to Get My GPS Location
-  </button>
-  <div id="coords" style="margin-top:10px;font-size:0.95rem;color:#333;"></div>
-  <div id="gps_help" style="display:none;background:#fff8e1;border:1px solid #f9a825;
-       border-radius:10px;padding:12px;margin-top:10px;font-size:0.88rem;
-       color:#555;line-height:1.7;">
-    <strong>📋 How to allow location:</strong><br>
-    <b>iPhone:</b> Settings → Safari → Location → Allow<br>
-    <b>Android:</b> Tap 🔒 in address bar → Site Settings → Location → Allow<br><br>
-    <strong>📍 Manual:</strong> Open
-    <a href="https://maps.google.com" target="_blank" style="color:#1976d2;">Google Maps</a>,
-    long-press your spot → copy the numbers at the top.
-  </div>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { margin:0; padding:0; font-family:'Segoe UI',sans-serif; background:transparent; }
+  #gps_btn {
+    width:100%; padding:14px; font-size:1.05rem; font-weight:700;
+    background:linear-gradient(135deg,#1b4332,#2d6a4f);
+    color:white; border:none; border-radius:12px;
+    box-shadow:0 4px 12px rgba(27,67,50,0.3);
+    cursor:pointer;
+  }
+  #gps_btn:disabled { opacity:0.7; cursor:wait; }
+  #result_box {
+    display:none; margin-top:12px;
+    background:#e8f5e9; border:2px solid #52b788;
+    border-radius:10px; padding:12px; text-align:center;
+  }
+  #result_box .coords {
+    font-size:1.1rem; font-weight:700; color:#1b4332;
+    letter-spacing:0.5px; margin:6px 0;
+  }
+  #result_box .hint {
+    font-size:0.82rem; color:#555; margin-top:4px;
+  }
+  #copy_btn {
+    margin-top:8px; padding:8px 16px;
+    background:#2d6a4f; color:white; border:none;
+    border-radius:8px; font-size:0.9rem; cursor:pointer;
+  }
+  #error_box {
+    display:none; margin-top:10px;
+    background:#fff8e1; border:1px solid #f9a825;
+    border-radius:10px; padding:10px;
+    font-size:0.85rem; color:#555; line-height:1.6;
+  }
+  #status { margin-top:8px; font-size:0.9rem; color:#555; min-height:20px; }
+</style>
+</head>
+<body>
+<button id="gps_btn" onclick="getLocation()">📡 Tap to Get My GPS Location</button>
+<div id="status"></div>
+
+<div id="result_box">
+  <div>✅ <strong>Location Captured!</strong></div>
+  <div class="coords" id="coord_display"></div>
+  <button id="copy_btn" onclick="copyCoords()">📋 Copy Coordinates</button>
+  <div class="hint">👇 Then paste into the Latitude &amp; Longitude boxes below</div>
 </div>
+
+<div id="error_box">
+  <strong>📋 How to allow location:</strong><br>
+  <b>iPhone:</b> Settings → Safari → Location → Allow<br>
+  <b>Android:</b> Tap 🔒 in address bar → Site Settings → Location → Allow<br><br>
+  Or open <a href="https://maps.google.com" target="_blank" style="color:#1976d2;">Google Maps</a>
+  → long-press your location → copy the numbers shown.
+</div>
+
 <script>
+var capturedLat = '';
+var capturedLon = '';
+
 function getLocation() {
-  var btn  = document.getElementById('gps_btn');
-  var info = document.getElementById('coords');
-  var help = document.getElementById('gps_help');
+  var btn    = document.getElementById('gps_btn');
+  var status = document.getElementById('status');
+  var errBox = document.getElementById('error_box');
   btn.textContent = '⏳ Getting location…';
   btn.disabled = true;
-  help.style.display = 'none';
+  errBox.style.display = 'none';
+  status.textContent = '';
 
   if (!navigator.geolocation) {
-    info.innerHTML = '❌ GPS not supported. Enter coordinates manually below.';
-    help.style.display = 'block';
+    status.innerHTML = '❌ GPS not supported on this browser.';
+    errBox.style.display = 'block';
     btn.textContent = '📡 GPS Not Available';
     btn.disabled = false;
     return;
@@ -432,30 +480,67 @@ function getLocation() {
 
   navigator.geolocation.getCurrentPosition(
     function(pos) {
-      var lat = pos.coords.latitude.toFixed(6);
-      var lon = pos.coords.longitude.toFixed(6);
-      // ✅ Full page reload with GPS params — Streamlit picks them up automatically
-      var url = new URL(window.parent.location.href);
-      url.searchParams.set('lat', lat);
-      url.searchParams.set('lon', lon);
-      window.parent.location.href = url.toString();
+      capturedLat = pos.coords.latitude.toFixed(6);
+      capturedLon = pos.coords.longitude.toFixed(6);
+      var acc = Math.round(pos.coords.accuracy);
+
+      // Show result box
+      document.getElementById('coord_display').textContent =
+        'Lat: ' + capturedLat + '   |   Lon: ' + capturedLon;
+      document.getElementById('result_box').style.display = 'block';
+      status.innerHTML = '<span style="color:#888;font-size:0.8rem;">Accuracy: ±' + acc + 'm</span>';
+
+      btn.textContent = '📡 Tap to Refresh Location';
+      btn.disabled = false;
+      btn.style.background = 'linear-gradient(135deg,#1b5e20,#2e7d32)';
+
+      // ✅ Also try to update parent URL params (works in some browsers)
+      try {
+        var url = new URL(window.parent.location.href);
+        url.searchParams.set('lat', capturedLat);
+        url.searchParams.set('lon', capturedLon);
+        window.parent.history.replaceState({}, '', url.toString());
+      } catch(e) {}
     },
     function(err) {
       var msgs = {
-        1: '🚫 Location blocked. See help below, then tap again.',
+        1: '🚫 Location blocked. See instructions below.',
         2: '📶 Location unavailable. Try moving outside.',
-        3: '⏱️ Timed out. Try again or enter manually below.'
+        3: '⏱️ Timed out. Try again.'
       };
-      info.innerHTML = '<span style="color:#c62828;">' +
+      status.innerHTML = '<span style="color:#c62828;">' +
         (msgs[err.code] || '❌ ' + err.message) + '</span>';
-      help.style.display = 'block';
+      errBox.style.display = 'block';
       btn.textContent = '📡 Tap to Retry GPS';
       btn.disabled = false;
     },
     {enableHighAccuracy: true, timeout: 12000, maximumAge: 0}
   );
 }
+
+function copyCoords() {
+  var text = capturedLat + ', ' + capturedLon;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      document.getElementById('copy_btn').textContent = '✅ Copied!';
+      setTimeout(function() {
+        document.getElementById('copy_btn').textContent = '📋 Copy Coordinates';
+      }, 2000);
+    });
+  } else {
+    // fallback
+    var el = document.createElement('textarea');
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    document.getElementById('copy_btn').textContent = '✅ Copied!';
+  }
+}
 </script>
+</body>
+</html>
 """
 
 # ─────────────────────────────────────────────
@@ -518,19 +603,16 @@ def main():
     side_selected = st.selectbox("📍 Which Part of the Farm?", FARM_SIDES, index=0)
 
     # ── GPS button ────────────────────────────
-    st.markdown("**📡 GPS Coordinates** — tap the button below on your phone")
-    # ✅ KEY FIX: use st.components.v1.html — it runs JavaScript correctly
-    # st.html() does NOT support JS; st.iframe() is for URLs not HTML strings
-    st.components.v1.html(GPS_HTML, height=160)
+    st.markdown("**📡 GPS Coordinates** — tap the button, then paste coordinates below")
+    st.components.v1.html(GPS_HTML, height=220)
 
-    st.caption("🔒 GPS blocked? Enter coordinates manually (Google Maps → long-press → copy numbers).")
+    st.caption("👆 After tapping the button, tap **📋 Copy Coordinates** then paste into both boxes below.")
 
     lat_col, lon_col = st.columns(2)
     with lat_col:
-        # ✅ FIX: pre-filled from URL params after GPS capture
-        lat_input = st.text_input("Latitude",  value=gps_lat, placeholder="e.g. 37.989450")
+        lat_input = st.text_input("Latitude",  value=gps_lat, placeholder="Paste here e.g. 37.989450")
     with lon_col:
-        lon_input = st.text_input("Longitude", value=gps_lon, placeholder="e.g. -87.590321")
+        lon_input = st.text_input("Longitude", value=gps_lon, placeholder="Paste here e.g. -87.590321")
 
     # STEP 2
     st.markdown("""
