@@ -10,6 +10,7 @@ except ImportError:
 from google.oauth2.service_account import Credentials
 from PIL import Image
 import smtplib
+import datetime, zoneinfo
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import datetime
@@ -817,7 +818,8 @@ if st.button("🔧 Test Google Sheet Connection"):
             st.stop()
 
         progress  = st.progress(0, text="Submitting…")
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        timestamp = datetime.datetime.now(zoneinfo.ZoneInfo("America/Chicago")).strftime("%Y-%m-%d %H:%M:%S CDT")
         photo_url = ""
         photo_b64 = ""
 
