@@ -192,17 +192,36 @@ def image_to_b64(raw):
         return ""
 
 # ─────────────────────────────────────────────
-#  GOOGLE SHEETS
+#  GOOGLE SHEETS  — same approach as Wheat Contest app
+#  Secrets needed:
+#    GSHEET_ID     = "your_sheet_id"
+#    CLIENT_EMAIL  = "farm-scout@farm-scout-510216.iam.gserviceaccount.com"
+#    PRIVATE_KEY   = "-----BEGIN PRIVATE KEY-----\nMII...\n-----END PRIVATE KEY-----\n"
 # ─────────────────────────────────────────────
 def get_gsheet():
     try:
-        creds_raw = get_secret("GSHEET_CREDENTIALS")
-        if not creds_raw:
-            st.error("GSHEET_CREDENTIALS secret is missing!")
+        # Read each credential separately — same as Wheat Contest
+        sheet_id     = get_secret("GSHEET_ID")
+        client_email = get_secret("CLIENT_EMAIL")
+        private_key  = get_secret("PRIVATE_KEY")
+
+        if not all([sheet_id, client_email, private_key]):
+            st.error("❌ Missing one of: GSHEET_ID, CLIENT_EMAIL, PRIVATE_KEY")
             return None, None
 
-        # Simple JSON parse — \n in key is already correct
-        creds_dict = json.loads(creds_raw)
+        # Build credentials dict directly — no JSON parsing needed
+        creds_dict = {
+            "type":                        "service_account",
+            "project_id":                  "farm-scout-510216",
+            "private_key_id":              get_secret("PRIVATE_KEY_ID", ""),
+            "private_key":                 private_key,
+            "client_email":                client_email,
+            "client_id":                   "",
+            "auth_uri":                    "https://accounts.google.com/o/oauth2/auth",
+            "token_uri":                   "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url":        f"https://www.googleapis.com/robot/v1/metadata/x509/{client_email}",
+        }
 
         scopes = [
             "https://www.googleapis.com/auth/spreadsheets",
@@ -210,7 +229,8 @@ def get_gsheet():
         ]
         creds  = Credentials.from_service_account_info(creds_dict, scopes=scopes)
         client = gspread.authorize(creds)
-        sh = client.open_by_key(get_secret("GSHEET_ID"))
+        sh     = client.open_by_key(sheet_id)
+
         try:
             ws = sh.worksheet("Issues")
         except Exception:
@@ -221,21 +241,24 @@ def get_gsheet():
                 "Photo URL", "Severity"
             ])
         return sh, ws
+
     except Exception as e:
-        st.error(f"Sheet connection error: {e}")
+        st.error(f"❌ Sheet connection error: {e}")
         return None, None
-    
+
+
 def save_to_gsheet(ws, row):
     try:
         ws.append_row(row)
         return True
     except Exception as e:
+        st.error(f"❌ Sheet save error: {e}")
         return False
 
 # ─────────────────────────────────────────────
-#  EMAIL
+#  EMAIL SHAMIM
 # ─────────────────────────────────────────────
-def send_email(issue_data, photo_src):
+def send_email_shamim(issue_data, photo_src):
     try:
         sender   = get_secret("EMAIL_SENDER")
         password = get_secret("EMAIL_PASSWORD")
@@ -331,45 +354,147 @@ def send_email(issue_data, photo_src):
     except Exception as e:
         return False, str(e)
 
+
 # ─────────────────────────────────────────────
-#  SMS  (email-to-SMS gateway)
+#  EMAIL ROBBIE
 # ─────────────────────────────────────────────
-def send_sms(issue_data):
+def send_email_robbie(issue_data, photo_src):
     try:
-        sender      = get_secret("EMAIL_SENDER")
-        password    = get_secret("EMAIL_PASSWORD")
-        # ✅ BUG FIX 3: was "SMS_ADDRESS " (trailing space) — now correct
-        sms_address = get_secret("SMS_ADDRESS")
-        if not all([sender, password, sms_address]):
-            return False, "SMS_ADDRESS secret missing"
+        sender   = get_secret("EMAIL_SENDER")
+        password = get_secret("EMAIL_PASSWORD")
+        receiver2 = get_secret("EMAIL_RECEIVER2")
+        if not all([sender, password, receiver2]):
+            return False, "Email secrets missing"
 
-        sev_icon = {
-            "🔴 High – Urgent":    "🔴 URGENT",
-            "🟡 Medium – Monitor": "🟡 Monitor",
-            "🟢 Low – Note it":    "🟢 Low",
-        }.get(issue_data["severity"], issue_data["severity"])
-
-        body = (
-            f"🌾 Farm Scout Alert\n"
-            f"{sev_icon}\n"
-            f"Farm: {issue_data['farm'][:40]}\n"
-            f"Spot: {issue_data['location']}\n"
-            f"Issue: {issue_data['issue_type']}\n"
-            f"By: {issue_data['reporter']}\n"
-            f"{issue_data['description'][:80]}"
-        )
-
-        msg            = MIMEText(body)
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = f"🚨 Scout Report – {issue_data['farm']} | {issue_data['issue_type']}"
         msg["From"]    = sender
-        msg["To"]      = sms_address
-        msg["Subject"] = ""
+        msg["To"]      = receiver2
 
+        sev_color = {
+            "🔴 High – Urgent":    "#c62828",
+            "🟡 Medium – Monitor": "#f9a825",
+            "🟢 Low – Note it":    "#2e7d32",
+        }.get(issue_data["severity"], "#555")
+
+        photo_html = (
+            f'<img src="{photo_src}" style="max-width:420px;border-radius:10px;margin-top:10px;"/>'
+            if photo_src else "<em>No photo submitted.</em>"
+        )
+        maps = ""
+        if issue_data.get("lat") not in ("N/A", ""):
+            maps = (
+                f'<br><a href="https://maps.google.com/?q={issue_data["lat"]},{issue_data["lon"]}" '
+                f'style="color:#1976d2;">📍 View on Google Maps</a>'
+            )
+
+        html = f"""
+        <html><body style="font-family:Segoe UI,sans-serif;background:#f0f4f0;padding:20px;">
+        <div style="max-width:600px;margin:auto;background:white;border-radius:16px;
+                    overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12);">
+          <div style="background:linear-gradient(135deg,#1b4332,#52b788);
+                      padding:22px;text-align:center;color:white;">
+            <div style="font-size:2rem;">🌾</div>
+            <h2 style="margin:4px 0 0 0;font-size:1.4rem;">Robbie Williams Farms</h2>
+            <p style="margin:4px 0 0 0;opacity:0.85;font-size:0.95rem;letter-spacing:1px;">
+              FIELD SCOUT REPORT</p>
+          </div>
+          <div style="padding:22px;">
+            <table style="width:100%;border-collapse:collapse;font-size:0.97rem;">
+              <tr><td style="padding:9px 10px;font-weight:700;color:#555;width:36%;
+                             border-bottom:1px solid #f0f0f0;">🏡 Farm</td>
+                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;font-weight:600;">
+                  {issue_data['farm']}</td></tr>
+              <tr style="background:#f9fbe7;">
+                  <td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
+                  📍 Location</td>
+                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
+                  {issue_data['location']}</td></tr>
+              <tr><td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
+                  ⚠️ Issue</td>
+                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
+                  {issue_data['issue_type']}</td></tr>
+              <tr style="background:#f9fbe7;">
+                  <td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
+                  🔥 Severity</td>
+                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;
+                             font-weight:700;color:{sev_color};">{issue_data['severity']}</td></tr>
+              <tr><td style="padding:9px 10px;font-weight:700;color:#555;border-bottom:1px solid #f0f0f0;">
+                  👤 Reporter</td>
+                  <td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;">
+                  {issue_data['reporter']}</td></tr>
+              <tr style="background:#f9fbe7;">
+                  <td style="padding:9px 10px;font-weight:700;color:#555;">🕒 Time</td>
+                  <td style="padding:9px 10px;">{issue_data['timestamp']}</td></tr>
+              <tr><td style="padding:9px 10px;font-weight:700;color:#555;">🗺️ GPS</td>
+                  <td style="padding:9px 10px;">
+                  {issue_data.get('lat','N/A')}, {issue_data.get('lon','N/A')}{maps}</td></tr>
+            </table>
+            <div style="background:#fff8e1;border-left:4px solid #fb8c00;
+                        border-radius:8px;padding:14px;margin-top:16px;">
+              <strong>📝 Description:</strong><br>
+              <span style="font-size:0.97rem;line-height:1.6;">{issue_data['description']}</span>
+            </div>
+            <div style="margin-top:18px;">
+              <strong>📷 Photo:</strong><br>{photo_html}
+            </div>
+          </div>
+          <div style="background:#f1f8f4;padding:12px;text-align:center;
+                      font-size:0.78rem;color:#888;border-top:1px solid #e0e0e0;">
+            🌾 Robbie Williams Farms – Field Scout App | {issue_data['timestamp']}
+          </div>
+        </div>
+        </body></html>"""
+
+        msg.attach(MIMEText(html, "html"))
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(sender, password)
-            server.sendmail(sender, sms_address, msg.as_string())
+            server.sendmail(sender, receiver2, msg.as_string())
         return True, "OK"
     except Exception as e:
         return False, str(e)
+
+    
+
+# ─────────────────────────────────────────────
+#  SMS  (email-to-SMS gateway)
+# ─────────────────────────────────────────────
+# def send_sms(issue_data):
+#     try:
+#         sender      = get_secret("EMAIL_SENDER")
+#         password    = get_secret("EMAIL_PASSWORD")
+#         # ✅ BUG FIX 3: was "SMS_ADDRESS " (trailing space) — now correct
+#         sms_address = get_secret("SMS_ADDRESS")
+#         if not all([sender, password, sms_address]):
+#             return False, "SMS_ADDRESS secret missing"
+
+#         sev_icon = {
+#             "🔴 High – Urgent":    "🔴 URGENT",
+#             "🟡 Medium – Monitor": "🟡 Monitor",
+#             "🟢 Low – Note it":    "🟢 Low",
+#         }.get(issue_data["severity"], issue_data["severity"])
+
+#         body = (
+#             f"🌾 Farm Scout Alert\n"
+#             f"{sev_icon}\n"
+#             f"Farm: {issue_data['farm'][:40]}\n"
+#             f"Spot: {issue_data['location']}\n"
+#             f"Issue: {issue_data['issue_type']}\n"
+#             f"By: {issue_data['reporter']}\n"
+#             f"{issue_data['description'][:80]}"
+#         )
+
+#         msg            = MIMEText(body)
+#         msg["From"]    = sender
+#         msg["To"]      = sms_address
+#         msg["Subject"] = ""
+
+#         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+#             server.login(sender, password)
+#             server.sendmail(sender, sms_address, msg.as_string())
+#         return True, "OK"
+#     except Exception as e:
+#         return False, str(e)
 
 # ─────────────────────────────────────────────
 #  LISTS
@@ -698,8 +823,9 @@ def main():
                           and photo_url != "embedded-in-email")
             else photo_b64
         )
-        email_ok, email_msg = send_email(issue_data, email_src)
-        sms_ok,   sms_msg   = send_sms(issue_data)
+        email_ok, email_msg = send_email_shamim(issue_data, email_src)
+        email_rob_ok, email_msg_rob = send_email_robbie(issue_data, email_src)
+        # sms_ok,   sms_msg   = send_sms(issue_data)
 
         progress.progress(100, text="Done!")
 
@@ -715,7 +841,8 @@ def main():
 
         lines.append("✅ Record saved to Google Sheets" if sheet_ok else "⚠️ Sheet not saved – check config")
         lines.append("✅ Email notification sent"        if email_ok else f"⚠️ Email not sent ({email_msg})")
-        lines.append("✅ Text message sent"              if sms_ok   else f"⚠️ SMS not sent ({sms_msg})")
+        # lines.append("✅ Email notification sent"        if email_rob_ok else f"⚠️ Email not sent ({email_msg_rob})")
+        # lines.append("✅ Text message sent"              if sms_ok   else f"⚠️ SMS not sent ({sms_msg})")
 
         st.markdown(f"""
         <div class="success-box">
